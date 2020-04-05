@@ -1,30 +1,38 @@
-// 15.2 - 0.0.0.1
+// 15.2 - 0.0.0.1 Happy Trails
 package com.mactso.HT;
 
-import net.minecraftforge.fml.common.Mod;
+import com.mactso.HT.config.MyConfig;
+import com.mactso.HT.events.PlayerMoveEvent;
 
-@Mod("HT")
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
+
+@Mod("ht")
 public class Main {
 
-	    public static final String MODID = "HT"; 
-		int i = 7;
+	    public static final String MODID = "ht"; 
 	    
 	    public Main()
 	    {
 
-//			FMLJavaModLoadingContext.get().getModEventBus().register(this);
-//	        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER,MyConfig.SERVER_SPEC );
-//			MinecraftForge.EVENT_BUS.register(this);
+			FMLJavaModLoadingContext.get().getModEventBus().register(this);
+	        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER,MyConfig.SERVER_SPEC );
+			MinecraftForge.EVENT_BUS.register(this);
 			
 	    }
 
 	    // Register ourselves for server and other game events we are interested in
-//		@SubscribeEvent 
-//		public void preInit (final FMLCommonSetupEvent event) {
-//			System.out.println("HarderBranchMining: Registering Handler");
-//			MinecraftForge.EVENT_BUS.register(new BlockBreakHandler ());
-//			
-//		}       
+		@SubscribeEvent 
+		public void preInit (final FMLCommonSetupEvent event) {
+			System.out.println("Happy Trails: Registering Handler");
+			MinecraftForge.EVENT_BUS.register(new PlayerMoveEvent ());
+			
+		}       
 
 		// in 14.4 and later, config file loads when the server starts when the world starts.
 //		@SubscribeEvent 
