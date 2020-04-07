@@ -15,15 +15,32 @@ import net.minecraft.world.World;;
 
 @Mod.EventBusSubscriber()
 public class PlayerMoveEvent {
-    @SubscribeEvent
+	private static int performanceImpactLimiter = 0;
+	
+	@SubscribeEvent
     public void PlayerMove(PlayerTickEvent event) { 
-    	final int SIX_SECONDS = 120;
+    	final int THREE_SECONDS = 60;
+
+    	// Only check 4 times per second to limit server impact.
+    	if (performanceImpactLimiter ++ < 5) {
+    		return;
+    	}
+    	performanceImpactLimiter = 0;
+    	
     	if (event.player instanceof ServerPlayerEntity) {
     		ServerPlayerEntity aPlayer = (ServerPlayerEntity) event.player;
     		World w = aPlayer.world;    		
     		Block b = w.getBlockState(aPlayer.getPosition().down()).getBlock();
     		if (b == Blocks.GRASS_PATH) {
-    			aPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, SIX_SECONDS, MyConfig.aHappyTrailSpeed ));
+    			if (MyConfig.aHappyTrailSpeed == 0) { // disabled
+    				return;
+    			} else if (MyConfig.aHappyTrailSpeed > 0) {
+    				int speed = MyConfig.aHappyTrailSpeed - 1; // effects are 0 based.
+    				aPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, THREE_SECONDS, MyConfig.aHappyTrailSpeed ));
+    			} else if (MyConfig.aHappyTrailSpeed<0) {
+       				int speed = 0 - MyConfig.aHappyTrailSpeed + 1; // effects are 0 based.
+    				aPlayer.addPotionEffect(new EffectInstance(Effects.SLOWNESS, THREE_SECONDS, 1 - MyConfig.aHappyTrailSpeed ));
+    			}
     		}
     	}
     	
