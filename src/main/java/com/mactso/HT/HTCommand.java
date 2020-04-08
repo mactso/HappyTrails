@@ -1,13 +1,18 @@
 package com.mactso.HT;
 
 import com.mactso.HT.config.MyConfig;
+import com.mactso.HT.config.TrailBlockManager;
+import com.mactso.HT.config.TrailBlockManager.TrailBlockItem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.dispenser.Position;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -39,7 +44,7 @@ public class HTCommand {
 			)
 			)
 			)		
-		.then(Commands.literal("listSpeeds").executes(ctx -> {
+		.then(Commands.literal("info").executes(ctx -> {
 					ServerPlayerEntity p = ctx.getSource().asPlayer();
 					World worldName = p.world;
 		            ITextComponent component = new StringTextComponent (worldName.getDimension().getType().getRegistryName() 
@@ -47,11 +52,20 @@ public class HTCommand {
 		            component.applyTextStyle(TextFormatting.BOLD);
 		            component.applyTextStyle(TextFormatting.DARK_GREEN);
 		            p.sendMessage(component);
-		            Block b = p.world.getBlockState(p.getPosition().down()).getBlock();
+		            Block b = p.world.getBlockState(p.getPosition()).getBlock();
+		            if (b == Blocks.AIR) {
+			            b = p.world.getBlockState(p.getPosition().down()).getBlock();		            	
+		            }
+		            TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
+		            int speed = 0;
+		            if (t != null) {
+			            speed = t.getTrailBlockSpeed();
+		            }
 		            component = new StringTextComponent (
-		              		  "\n  Speed Level...........: " + MyConfig.aHappyTrailSpeed
+		              		  "\n  Speed Level...........: " + speed
 		            		+ "\n  Standing On...........: " + b.getRegistryName().toString()
-		              		+ "\n  Debug Level...........: " + MyConfig.aDebugLevel		            		
+		              		+ "\n  Player Position.......: " + p.getPosition().toString()		            		
+		              		+ "\n  Debug Level...........: " + MyConfig.aDebugLevel	
 		            		);
 		            component.applyTextStyle(TextFormatting.DARK_GREEN);
 		            p.sendMessage(component);
@@ -66,12 +80,22 @@ public class HTCommand {
 	
 	public static int setDebugLevel (int newDebugLevel) {
 		MyConfig.aDebugLevel = newDebugLevel;
-		MyConfig.pushValues();
+		MyConfig.pushDebugValue();
 		return 1;
 	}
 	
 	public static int setSpeedForBlock (ServerPlayerEntity p, int newSpeedValue) {
-		MyConfig.aHappyTrailSpeed= newSpeedValue;
+        Block b = p.world.getBlockState(p.getPosition()).getBlock();
+        if (b == Blocks.AIR) {
+            b = p.world.getBlockState(p.getPosition().down()).getBlock();		            	
+        }
+        String key = b.getRegistryName().toString();
+        TrailBlockManager.TrailBlockItem oldT = null;
+        if (newSpeedValue  == 0 ) {
+        	TrailBlockManager.trailBlockHashtable.remove(key);
+        } else {
+        	oldT = TrailBlockManager.trailBlockHashtable.put(key, new TrailBlockItem(newSpeedValue));
+        }
 		MyConfig.pushValues();
 		return 1;
 	}

@@ -3,6 +3,7 @@ package com.mactso.HT.config;
 import java.util.Arrays;
 import java.util.List;
 import com.mactso.HT.Main;
+import com.mactso.HT.config.TrailBlockManager;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraftforge.common.ForgeConfig.Server;
@@ -31,6 +32,8 @@ public class MyConfig {
 	
 	public static int       aHappyTrailSpeed = 1;
 	public static int       aDebugLevel;
+	public static String[]  defaultTrailBlocks;
+	public static String    defaultTrailBlocks6464;
 	
 	@SubscribeEvent
 	public static void onModConfigEvent(final ModConfig.ModConfigEvent configEvent)
@@ -38,32 +41,39 @@ public class MyConfig {
 		if (configEvent.getConfig().getSpec() == MyConfig.SERVER_SPEC)
 		{
 			bakeConfig();
+			TrailBlockManager.trailBlockInit();
 		}
 	}	
 
-	public static void pushValues() {
+	public static void pushDebugValue() {
 		if (aDebugLevel > 0) {
 			System.out.println("dbgL:"+MyConfig.aDebugLevel);
-			System.out.println("dbgL:"+MyConfig.aDebugLevel);
 		}
-		SERVER.happyTrailSpeed.set( MyConfig.aHappyTrailSpeed);
 		SERVER.debugLevel.set( MyConfig.aDebugLevel);
-	}	
+	}
 	
+	public static void pushValues() {
+		SERVER.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsString());
+	}	
 	public static void bakeConfig()
 	{
-		aHappyTrailSpeed = SERVER.happyTrailSpeed.get();
 		aDebugLevel = SERVER.debugLevel.get();
-		System.out.println("Happy Trails Speed: " + aHappyTrailSpeed );
+		defaultTrailBlocks6464 = SERVER.defaultTrailBlocksActual.get() ;
 		System.out.println("Happy Trails Debug: " + aDebugLevel );
 	}
 	
 	public static class Server {
 		public final IntValue	 happyTrailSpeed ;
 		public final IntValue    debugLevel;
+		public final ConfigValue<String> defaultTrailBlocksActual;
+		public final String defaultTrailBlocks6464 = 
+				  "minecraft:grass_path,2;\n\r"
+				+ "minecraft:sand,-1;\n\r"
+				+ "minecraft:stone_brick_slab,3\n\r;"
+				;
 		
 		public Server(ForgeConfigSpec.Builder builder) {
-			builder.push("Exhaustion Control Values");
+			builder.push("Happy Trail Control Values");
 			happyTrailSpeed= builder
 					.comment("Happy Trail Speed: -11 to 11")
 					.translation(Main.MODID + ".config." + "happyTrailSpeed")
@@ -74,6 +84,13 @@ public class MyConfig {
 					.translation(Main.MODID + ".config." + "debugLevel")
 					.defineInRange("debugLevel", () -> 0, 0, 2);			
 			builder.pop();
+			builder.push ("Trail Values 6464");
+			
+			defaultTrailBlocksActual = builder
+					.comment("Trail Block String 6464")
+					.translation(Main.MODID + ".config" + "defaultTrailBlocksActual")
+					.define("defaultTrailBlocksActual", defaultTrailBlocks6464);
+			builder.pop();			
 		}
 	}
 	
