@@ -30,8 +30,9 @@ public class MyConfig {
 		SERVER = specPair.getLeft();
 	}	
 	
-	public static int       aHappyTrailSpeed = 1;
+//	public static int       aHappyTrailSpeed;
 	public static int       aDebugLevel;
+	public static boolean   aParticlesOn;
 	public static String[]  defaultTrailBlocks;
 	public static String    defaultTrailBlocks6464;
 	
@@ -51,6 +52,10 @@ public class MyConfig {
 		}
 		SERVER.debugLevel.set( MyConfig.aDebugLevel);
 	}
+
+	public static void pushNewParticlesOn() {
+		SERVER.particlesOn.set(MyConfig.aParticlesOn);
+	}
 	
 	public static void pushValues() {
 		SERVER.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsString());
@@ -59,12 +64,16 @@ public class MyConfig {
 	{
 		aDebugLevel = SERVER.debugLevel.get();
 		defaultTrailBlocks6464 = SERVER.defaultTrailBlocksActual.get() ;
-		System.out.println("Happy Trails Debug: " + aDebugLevel );
+		if (aDebugLevel > 0) {
+			System.out.println("Happy Trails Debug: " + aDebugLevel );
+		}
 	}
 	
 	public static class Server {
-		public final IntValue	 happyTrailSpeed ;
-		public final IntValue    debugLevel;
+
+//		public final IntValue	  happyTrailSpeed;
+		public final IntValue     debugLevel;
+		public final BooleanValue particlesOn;
 		public final ConfigValue<String> defaultTrailBlocksActual;
 		public final String defaultTrailBlocks6464 = 
 				  "minecraft:grass_path,2;\n\r"
@@ -74,16 +83,23 @@ public class MyConfig {
 		
 		public Server(ForgeConfigSpec.Builder builder) {
 			builder.push("Happy Trail Control Values");
-			happyTrailSpeed= builder
-					.comment("Happy Trail Speed: -11 to 11")
-					.translation(Main.MODID + ".config." + "happyTrailSpeed")
-					.defineInRange("happyTrailSpeed", () -> -11, 1, 11);
+//			happyTrailSpeed= builder
+//					.comment("Happy Trail Speed: -11 to 11")
+//					.translation(Main.MODID + ".config." + "happyTrailSpeed")
+//					.defineInRange("happyTrailSpeed", () -> -11, 1, 11);
 			
 			debugLevel = builder
 					.comment("Debug Level: 0 = Off, 1 = Log, 2 = Chat+Log")
 					.translation(Main.MODID + ".config." + "debugLevel")
-					.defineInRange("debugLevel", () -> 0, 0, 2);			
+					.defineInRange("debugLevel", () -> 0, 0, 2);
+
+			particlesOn = builder
+					.comment("Particles On?: [true] / false")
+					.translation(Main.MODID + ".config." + "particlesOn")
+					.define ("particlesOn", () -> true);
+			
 			builder.pop();
+
 			builder.push ("Trail Values 6464");
 			
 			defaultTrailBlocksActual = builder

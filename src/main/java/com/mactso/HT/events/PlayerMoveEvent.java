@@ -62,7 +62,7 @@ public class PlayerMoveEvent {
     				aPlayer.removeActivePotionEffect(Effects.SPEED );
     			}
     		}
-			aPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, THREE_SECONDS, speed ));
+			aPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, THREE_SECONDS, speed, false, MyConfig.aParticlesOn  ));
 		} else if (speed <=-1) {
 			speed =  (-speed ) - 1; // convert to 0 based positive value.
 			EffectInstance ei = aPlayer.getActivePotionEffect(Effects.SLOWNESS);
@@ -75,7 +75,7 @@ public class PlayerMoveEvent {
     				aPlayer.removeActivePotionEffect(Effects.SLOWNESS );
     			}
     		}
-			aPlayer.addPotionEffect(new EffectInstance(Effects.SLOWNESS, THREE_SECONDS, speed ));
+			aPlayer.addPotionEffect(new EffectInstance(Effects.SLOWNESS, THREE_SECONDS, speed, false, MyConfig.aParticlesOn ));
 		}
 	}
 }

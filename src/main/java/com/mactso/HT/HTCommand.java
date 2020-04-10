@@ -5,7 +5,7 @@ import com.mactso.HT.config.TrailBlockManager;
 import com.mactso.HT.config.TrailBlockManager.TrailBlockItem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
@@ -36,6 +36,18 @@ public class HTCommand {
 			)
 			)
 			)
+		.then(Commands.literal("particlesOn").then(
+				Commands.literal("true").executes(ctx -> {
+					return setParticlesOn(true);
+				}
+				)).then (
+				Commands.literal("false").executes(ctx -> {
+					return setParticlesOn(false);
+			}
+			)
+			)
+			)
+
 		// update or add a speed value for the block the player is standing on.
 		.then(Commands.literal("setHappyTrailSpeed").then(
 				Commands.argument("setHappyTrailSpeed", IntegerArgumentType.integer(-11,11)).executes(ctx -> {
@@ -83,6 +95,12 @@ public class HTCommand {
 		MyConfig.pushDebugValue();
 		return 1;
 	}
+
+	public static int setParticlesOn (boolean newParticlesOn) {
+		MyConfig.aParticlesOn = newParticlesOn;
+		MyConfig.pushNewParticlesOn();
+		return 1;
+	}	
 	
 	public static int setSpeedForBlock (ServerPlayerEntity p, int newSpeedValue) {
         Block b = p.world.getBlockState(p.getPosition()).getBlock();
