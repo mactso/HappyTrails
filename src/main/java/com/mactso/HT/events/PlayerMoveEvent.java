@@ -43,26 +43,26 @@ public class PlayerMoveEvent {
 		}
 
 		int speed = t.getTrailBlockSpeed();
-	
 		if (speed == 0) { // Happy Trails (temporarily) Disabled for Entry
 			return;
-		} else if (speed >= 1) {
-    		speed = speed - 1; // convert to 0 based.
+		}
+		
+		if (speed >= 1) {
+
+			speed = speed - 1; // convert to 0 based.
     		
     		// This is tricky--- if the player has a more powerful effect, it sometimes
     		// sticks "on" and won't expire so remove it once it has half a second left.
-    		
-			EffectInstance ei = aPlayer.getActivePotionEffect(Effects.SPEED);
+ 			EffectInstance ei = aPlayer.getActivePotionEffect(Effects.SPEED);
     		if (ei != null) {
     			if (ei.getDuration() > 10) {
     				return;
     			}
-//	    			System.out.println ("amp: " + ei.getAmplifier());
     			if (ei.getAmplifier() > speed) {
     				aPlayer.removeActivePotionEffect(Effects.SPEED );
     			}
     		}
-			aPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, THREE_SECONDS, speed, false, MyConfig.aParticlesOn  ));
+			aPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, THREE_SECONDS, speed, true, MyConfig.aParticlesOn  ));
 		} else if (speed <=-1) {
 			speed =  (-speed ) - 1; // convert to 0 based positive value.
 			EffectInstance ei = aPlayer.getActivePotionEffect(Effects.SLOWNESS);
@@ -70,12 +70,11 @@ public class PlayerMoveEvent {
     			if (ei.getDuration() > 10) {
     				return;
     			}
-//	    			System.out.println ("amp: " + ei.getAmplifier());
     			if (ei.getAmplifier() > speed) {
     				aPlayer.removeActivePotionEffect(Effects.SLOWNESS );
     			}
     		}
-			aPlayer.addPotionEffect(new EffectInstance(Effects.SLOWNESS, THREE_SECONDS, speed, false, MyConfig.aParticlesOn ));
+			aPlayer.addPotionEffect(new EffectInstance(Effects.SLOWNESS, THREE_SECONDS, speed, true, MyConfig.aParticlesOn ));
 		}
 	}
 }

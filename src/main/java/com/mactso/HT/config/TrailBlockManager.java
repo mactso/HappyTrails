@@ -36,7 +36,7 @@ public class TrailBlockManager {
 		int speed;
 		for (String key:trailBlockHashtable.keySet()) {
 			speed = trailBlockHashtable.get(key).trailBlockSpeed;
-			String tempString = key+","+speed+"\n\r;";
+			String tempString = key+","+speed+";";
 			returnString += tempString;
 		}
 		return returnString;
@@ -77,7 +77,7 @@ public class TrailBlockManager {
 				if (!modAndBlock.contentEquals("hbm:default") &&
 				    !ForgeRegistries.ITEMS.containsKey(new ResourceLocation(modAndBlock))
 				   )  {
-					System.out.println("Happy Trails: Tool: " + modAndBlock + " not in Forge Registry.  Mispelled?");
+					System.out.println("Happy Trails: Block: " + modAndBlock + " not in Forge Registry.  Mispelled?");
 				}
 			} catch (Exception e) {
 				System.out.println("Happy Trails:  Bad Block Config : " + MyConfig.defaultTrailBlocks[i]);

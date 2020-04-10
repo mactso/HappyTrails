@@ -76,9 +76,9 @@ public class MyConfig {
 		public final BooleanValue particlesOn;
 		public final ConfigValue<String> defaultTrailBlocksActual;
 		public final String defaultTrailBlocks6464 = 
-				  "minecraft:grass_path,2;\n\r"
-				+ "minecraft:sand,-1;\n\r"
-				+ "minecraft:stone_brick_slab,3\n\r;"
+				  "minecraft:grass_path,2;"
+				+ "minecraft:sand,-1;"
+				+ "minecraft:stone_brick_slab,3;"
 				;
 		
 		public Server(ForgeConfigSpec.Builder builder) {
@@ -94,7 +94,7 @@ public class MyConfig {
 					.defineInRange("debugLevel", () -> 0, 0, 2);
 
 			particlesOn = builder
-					.comment("Particles On?: [true] / false")
+					.comment("Particles On: [true] / false")
 					.translation(Main.MODID + ".config." + "particlesOn")
 					.define ("particlesOn", () -> true);
 			
