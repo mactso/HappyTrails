@@ -1,0 +1,11 @@
+/run/
+/.classpath
+/bin/
+/build/
+/.project
+/gradlew
+/gradlew.bat
+/.gradle/
+/.settings/
+/HappyTrails_Client.launch
+/HappyTrails_Server.launch
