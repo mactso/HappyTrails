@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 
@@ -17,7 +18,7 @@ public class Main
 	// , serverSideOnly=true  (research this tag more)
 	@Instance
 	public static Main instance;
-   public static SimpleNetworkWrapper network;		
+    public static SimpleNetworkWrapper network;		
 
 	@EventHandler
 	public void preInit (FMLPreInitializationEvent event) {
@@ -26,6 +27,13 @@ public class Main
 		MinecraftForge.EVENT_BUS.register(new MovePlayerEvent ());
 		MinecraftForge.EVENT_BUS.register(this);		
 	}
+
+	@EventHandler
+	public void serverLoad (FMLServerStartingEvent event) {
+		System.out.println("Happy Trails: Registering Command");
+		event.registerServerCommand(new HappyTrailsCommand());
+	}
+
 	
 //	@EventHandler
 //	public void init (FMLInitializationEvent event) {

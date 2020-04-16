@@ -26,7 +26,7 @@ public class MyConfig {
 
 	@Comment ( { "Show Particles" } )
 	@Name ("Show Particles")
-	public static boolean   aParticlesOn = true;
+	public static boolean   aParticlesDisplay = true;
 	
 	@Comment ( { "Trail Block Values: mod:block, speed [-11,11]" } )
 	@Name ( "Trail Block Values:" )
@@ -52,6 +52,10 @@ public class MyConfig {
 //				aDownSpeedModifier = serverDownSpeed;
 			}
 		}
+	}
+	
+	public static void pushValues() {
+		MyConfig.defaultTrailBlocks = TrailBlockManager.getTrailHashAsStringArray();
 	}
 }
 

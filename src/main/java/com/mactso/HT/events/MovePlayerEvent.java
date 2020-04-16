@@ -47,7 +47,6 @@ public class MovePlayerEvent {
 
 		int speed = t.getTrailBlockSpeed();
 
-		System.out.println("Happy Trails:  PostPlayer.StepHeight : " + event.player.stepHeight);
 		if (speed == 0) { // Happy Trails (temporarily) Disabled for Entry
 			return;
 		}
@@ -67,7 +66,7 @@ public class MovePlayerEvent {
     				aPlayer.removeActivePotionEffect( POTIONSPEED);
     			}
     		}
-			aPlayer.addPotionEffect(new PotionEffect(POTIONSPEED, THREE_SECONDS, speed, true, MyConfig.aParticlesOn ));
+			aPlayer.addPotionEffect(new PotionEffect(POTIONSPEED, THREE_SECONDS, speed, true, MyConfig.aParticlesDisplay ));
 		} else if (speed <=-1) {
 			speed =  (-speed ) - 1; // convert to 0 based positive value.
 			PotionEffect ei = aPlayer.getActivePotionEffect(POTIONSLOW);
@@ -79,7 +78,7 @@ public class MovePlayerEvent {
     				aPlayer.removeActivePotionEffect(POTIONSLOW );
     			}
     		}
-			aPlayer.addPotionEffect(new PotionEffect(POTIONSLOW, THREE_SECONDS, speed, true, MyConfig.aParticlesOn ));
+			aPlayer.addPotionEffect(new PotionEffect(POTIONSLOW, THREE_SECONDS, speed, true, MyConfig.aParticlesDisplay ));
 		}
 	}
 }

@@ -29,15 +29,16 @@ public class TrailBlockManager {
 		return t;
 	}
 
-	public static String getTrailHashAsString() {
-		String returnString="";
+	public static String[] getTrailHashAsStringArray() {
+		String[] returnStringArray = new String[trailBlockHashtable.size()];
 		int speed;
+		int i = 0;
 		for (String key:trailBlockHashtable.keySet()) {
 			speed = trailBlockHashtable.get(key).trailBlockSpeed;
 			String tempString = key+","+speed+";";
-			returnString += tempString;
+			returnStringArray [i++] = tempString;
 		}
-		return returnString;
+		return returnStringArray;
 	
 	}
 
@@ -74,6 +75,7 @@ public class TrailBlockManager {
 //		}
 
 	}
+	
 
 	public static class TrailBlockItem {
 		int trailBlockSpeed;
