@@ -35,7 +35,7 @@ public class TrailBlockManager {
 		int i = 0;
 		for (String key:trailBlockHashtable.keySet()) {
 			speed = trailBlockHashtable.get(key).trailBlockSpeed;
-			String tempString = key+","+speed+";";
+			String tempString = key+","+speed;
 			returnStringArray [i++] = tempString;
 		}
 		return returnStringArray;

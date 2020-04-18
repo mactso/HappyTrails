@@ -56,6 +56,7 @@ public class MyConfig {
 	
 	public static void pushValues() {
 		MyConfig.defaultTrailBlocks = TrailBlockManager.getTrailHashAsStringArray();
+		ConfigManager.sync (Reference.MOD_ID, Config.Type.INSTANCE);
 	}
 }
 
