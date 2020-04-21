@@ -1,4 +1,5 @@
 /run/
+/logs/
 /.classpath
 /bin/
 /build/
