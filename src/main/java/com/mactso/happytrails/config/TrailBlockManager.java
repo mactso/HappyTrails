@@ -18,16 +18,16 @@ public class TrailBlockManager {
 	
 	public static Hashtable<String, TrailBlockItem> trailBlockHashtable = new Hashtable<>();
 
-	public static TrailBlockItem getTrailBlockInfo(String registryDomainKey) {
+	public static TrailBlockItem getTrailBlockInfo(String trailKey) {
 
 		if (trailBlockHashtable.isEmpty()) {
 			trailBlockInit();
 		}
-		TrailBlockItem t = trailBlockHashtable.get(registryDomainKey);
+		TrailBlockItem t = trailBlockHashtable.get(trailKey);
 		return t;
 	}
 
-	public static String updateRemoveTrailBlockInfo(String keyRegistryDomain, int speed) {
+	public static String updateRemoveTrailBlockInfo(String keyRegistryDomain, int meta, int speed) {
 		String result = null;
 		if (!Block.REGISTRY.containsKey(new ResourceLocation(keyRegistryDomain)))  {
 			result = "Happy Trails: Block: " + keyRegistryDomain + " not in Forge Registry.  Mispelled?";
@@ -36,17 +36,19 @@ public class TrailBlockManager {
 			}		
 
 			return result;
-		}		
+		}	
+		
+		String trailKey = keyRegistryDomain + ">" + Integer.toString(meta);
 
 		if (speed == 0) {
-			trailBlockHashtable.remove(keyRegistryDomain);
+			trailBlockHashtable.remove(trailKey);
 //        	MyConfig.pushValues();
-        	result = "Removed Happy Trails Entry for block: " + keyRegistryDomain;		
+        	result = "Removed Happy Trails Entry for block: " + trailKey;		
 		} else if ((speed >= -11) && (speed <= 11)) {
 			TrailBlockItem t = new TrailBlockItem(speed);
-			trailBlockHashtable.put (keyRegistryDomain, t);
+			trailBlockHashtable.put (trailKey, t);
 //        	MyConfig.pushValues();
-        	result = "Happy Trails:Added Trails Entry for block: " + keyRegistryDomain + ", " + speed +".";	        	
+        	result = "Happy Trails:Added Trails Entry for block: " + trailKey + ", " + speed +".";	        	
 			if (MyConfig.aDebugLevel>0) {
 				System.out.println(result);
 			}		
@@ -81,9 +83,14 @@ public class TrailBlockManager {
 		while (i < MyConfig.defaultTrailBlocks.length) {
 			try {
 				StringTokenizer st = new StringTokenizer(MyConfig.defaultTrailBlocks[i], ",");
-				String keyRegistryDomain = st.nextToken();
+				String trailKey = st.nextToken();
 				int speed = Integer.parseInt(st.nextToken().trim());
-				String result = updateRemoveTrailBlockInfo(keyRegistryDomain, speed);
+				
+				StringTokenizer keySt = new StringTokenizer(trailKey,">");
+				String keyRegistryDomain = keySt.nextToken();
+				int meta = Integer.parseInt(keySt.nextToken().trim());
+				
+				String result = updateRemoveTrailBlockInfo(keyRegistryDomain, meta, speed);
 				if (MyConfig.aDebugLevel > 0) {
 					System.out.println(result);
 				}

@@ -1,3 +1,4 @@
+// 1.12.2
 package com.mactso.happytrails.config;
 
 import com.mactso.happytrails.util.Reference;
@@ -12,6 +13,8 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEve
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -20,8 +23,6 @@ import net.minecraft.util.text.TextFormatting;
 @Config(modid=Reference.MOD_ID)
 @Mod.EventBusSubscriber
 public class MyConfig {
-	@Ignore
-	final static Block AIR = Block.getBlockFromName("AIR");
 	
 	@Ignore
 	public static boolean serverSide = false;
@@ -31,7 +32,7 @@ public class MyConfig {
 	@Comment ( { "Debug Level" } )
 	@Name ("Debug Level   0 to 2 : 'Off', 'Log', 'Chat & Log'")
 	@RangeInt  (min=0, max=2)
-	public static int aDebugLevel = 1;
+	public static int aDebugLevel = 0;
 
 	@Comment ( { "Show Particles" } )
 	@Name ("Show Particles")
@@ -40,9 +41,11 @@ public class MyConfig {
 	@Comment ( { "Trail Block Values: mod:block, speed [-11,11]" } )
 	@Name ( "Trail Block Values:" )
 	public static String [] defaultTrailBlocks= {
-					"minecraft:grass_path,2",
-					"minecraft:sand,-1",
-					"minecraft:stone_slab,3"
+					"minecraft:grass_path>0,1",
+					"minecraft:double_plant>0,-1",
+					"minecraft:sand>0,-1",
+					"minecraft:stone_slab>0,2",
+					"minecraft:stone_slab>5,3"
 				};	
 	
 	@SubscribeEvent
@@ -129,16 +132,20 @@ public class MyConfig {
 	}
 	
 	public static void setTrailBlockSpeedValue(String[] args, EntityPlayer player) {
-
-		Block b = player.world.getBlockState(player.getPosition()).getBlock();
-		if (b == AIR) {
-		    b = player.world.getBlockState(player.getPosition().down()).getBlock();		            	
+		int meta = 0;
+		Block block = player.world.getBlockState(player.getPosition()).getBlock();
+		if (block instanceof BlockAir) {
+			IBlockState bs = player.world.getBlockState(player.getPosition().down());
+			block = bs.getBlock();
+			meta = block.getMetaFromState(bs);
 		}
-		String keyRegistryDomain = b.getRegistryName().toString();
+
+		String keyRegistryDomain = block.getRegistryName().toString();
+
 		try {
 			int newSpeedValue =  Integer.valueOf(args[1]);
 			String result;
-			result = TrailBlockManager.updateRemoveTrailBlockInfo(keyRegistryDomain, newSpeedValue);
+			result = TrailBlockManager.updateRemoveTrailBlockInfo(keyRegistryDomain, meta, newSpeedValue);
 			pushTrailBlockSpeedValues();
 			ITextComponent component = new TextComponentString (result);
 			component.getStyle().setColor(TextFormatting.GREEN);

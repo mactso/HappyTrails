@@ -4,6 +4,8 @@ import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.config.TrailBlockManager;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -19,10 +21,13 @@ public class MovePlayerEvent {
 
 	@SubscribeEvent
     public void PlayerMove(PlayerTickEvent event) { 
-    	final int THREE_SECONDS = 60;
-    	final Block AIR = Block.getBlockFromName("AIR");
+    	final int ONE_SECONDS = 20;
     	final Potion POTIONSPEED = Potion.getPotionById(1);
     	final Potion POTIONSLOW = Potion.getPotionById(2);
+    	
+    	Block block;
+    	IBlockState bs;
+    	int meta = 0;
     	
     	if (!(event.player instanceof EntityPlayerMP )) {
     		return;
@@ -33,13 +38,18 @@ public class MovePlayerEvent {
 		World w = aPlayer.world;
 		// w.getPlayers().size();
 
-		Block b = w.getBlockState(aPlayer.getPosition()).getBlock();
-        if (b == AIR ) {
-            b = aPlayer.world.getBlockState(aPlayer.getPosition().down()).getBlock();		            	
-        } 
-        
+		bs = aPlayer.world.getBlockState(aPlayer.getPosition());
+		block = bs.getBlock();
+		meta = block.getMetaFromState(bs);
+		if (block instanceof BlockAir) {
+			bs = aPlayer.world.getBlockState(aPlayer.getPosition().down());
+			block = bs.getBlock();
+			meta = block.getMetaFromState(bs);
+		}
+		String trailKey = block.getRegistryName().toString() + ">" + Integer.toString(meta);
+		
 		//String registeryName = b.getRegistryName().toString();
-		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
+		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(trailKey);
 		
 		if (t==null) {  // standing on block with no configuration entry
 			return;
@@ -66,7 +76,7 @@ public class MovePlayerEvent {
     				aPlayer.removeActivePotionEffect( POTIONSPEED);
     			}
     		}
-			aPlayer.addPotionEffect(new PotionEffect(POTIONSPEED, THREE_SECONDS, speed, true, MyConfig.aParticlesDisplay ));
+			aPlayer.addPotionEffect(new PotionEffect(POTIONSPEED, ONE_SECONDS, speed, true, MyConfig.aParticlesDisplay ));
 		} else if (speed <=-1) {
 			speed =  (-speed ) - 1; // convert to 0 based positive value.
 			PotionEffect ei = aPlayer.getActivePotionEffect(POTIONSLOW);
@@ -78,7 +88,7 @@ public class MovePlayerEvent {
     				aPlayer.removeActivePotionEffect(POTIONSLOW );
     			}
     		}
-			aPlayer.addPotionEffect(new PotionEffect(POTIONSLOW, THREE_SECONDS, speed, true, MyConfig.aParticlesDisplay ));
+			aPlayer.addPotionEffect(new PotionEffect(POTIONSLOW, ONE_SECONDS, speed, true, MyConfig.aParticlesDisplay ));
 		}
 	}
 }
