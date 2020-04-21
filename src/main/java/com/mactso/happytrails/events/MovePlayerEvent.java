@@ -1,7 +1,7 @@
-package com.mactso.HT.events;
+package com.mactso.happytrails.events;
 
-import com.mactso.HT.config.MyConfig;
-import com.mactso.HT.config.TrailBlockManager;
+import com.mactso.happytrails.config.MyConfig;
+import com.mactso.happytrails.config.TrailBlockManager;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
