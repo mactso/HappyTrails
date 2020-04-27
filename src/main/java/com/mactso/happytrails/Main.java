@@ -3,32 +3,43 @@ package com.mactso.happytrails;
 import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.config.TrailBlockManager;
 import com.mactso.happytrails.events.MovePlayerEvent;
-import com.mactso.happytrails.network.Register;
+//import com.mactso.happytrails.network.Register;
 import com.mactso.happytrails.util.Reference;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
+// Special Note: You must choose one of the following annotations to compile against.
+// NOTE: Compile with *THIS* annotation for client/server version.
 
-@Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, serverSideOnly = true)
+@Mod(modid = Reference.MOD_ID, 
+name = Reference.NAME, 
+version = Reference.VERSION  
+)
+//NOTE: Compile with *THIS* annotation for server side only version.
+//@Mod(modid = Reference.MOD_ID, 
+//	name = Reference.NAME, 
+//	version = Reference.VERSION , 
+//	serverSideOnly = true,
+//	acceptableRemoteVersions = "*")
+
 public class Main
 {
-	// , serverSideOnly=true  (research this tag more)
+
 	@Instance
 	public static Main instance;
-    public static SimpleNetworkWrapper network;		
 
 	@EventHandler
 	public void preInit (FMLPreInitializationEvent event) {
-
+		System.out.println("Happy Trails: serverSideOnly = true. ");
+		
 		TrailBlockManager.trailBlockInit();
 		MyConfig.startupComplete = true;
 		
@@ -43,10 +54,10 @@ public class Main
 		event.registerServerCommand(new HappyTrailsCommand());
 	}
 	
-	@EventHandler
-	public void init (FMLInitializationEvent event) {
-		Register.initPackets();
-	}
+//	@EventHandler
+//	public void init (FMLInitializationEvent event) {
+//		Register.initPackets();
+//	}
 
 	@SubscribeEvent
 	public void clientConnectionEvent (PlayerLoggedInEvent event) {
