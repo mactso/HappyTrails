@@ -42,7 +42,7 @@ public class MyConfig {
 	@Name ( "Trail Block Values:" )
 	public static String [] defaultTrailBlocks= {
 					"minecraft:grass_path>0,1",
-					"minecraft:double_plant>0,-1",
+					"minecraft:double_plant>2,-1",
 					"minecraft:sand>0,-1",
 					"minecraft:stone_slab>0,2",
 					"minecraft:stone_slab>5,3"
