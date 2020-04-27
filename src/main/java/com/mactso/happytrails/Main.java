@@ -38,7 +38,7 @@ public class Main
 
 	@EventHandler
 	public void preInit (FMLPreInitializationEvent event) {
-		System.out.println("Happy Trails: serverSideOnly = true. ");
+		System.out.println("Happy Trails: clientServer version ");
 		
 		TrailBlockManager.trailBlockInit();
 		MyConfig.startupComplete = true;
