@@ -1,17 +1,16 @@
 package com.mactso.HT.config;
 
-import java.util.Arrays;
-import java.util.List;
-import com.mactso.HT.Main;
-import com.mactso.HT.config.TrailBlockManager;
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraftforge.common.ForgeConfig.Server;
-import net.minecraftforge.common.ForgeConfigSpec;
+import com.mactso.HT.Main;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,6 +34,7 @@ public class MyConfig {
 	public static boolean   aParticlesOn;
 	public static String[]  defaultTrailBlocks;
 	public static String    defaultTrailBlocks6464;
+	public static final Boolean BOLD = true;
 	
 	@SubscribeEvent
 	public static void onModConfigEvent(final ModConfig.ModConfigEvent configEvent)
@@ -60,6 +60,28 @@ public class MyConfig {
 	public static void pushValues() {
 		SERVER.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsString());
 	}	
+    // for this mod- default color is green.
+	public static void sendChat(PlayerEntity p, String chatMessage) {
+		StringTextComponent component = new StringTextComponent (chatMessage);
+		// set to Dark Green Bold
+		Style chatStyle = Style.field_240709_b_.func_240712_a_(TextFormatting.DARK_GREEN);
+		p.sendMessage(component.func_230530_a_(chatStyle) , p.getUniqueID());
+	}
+
+	// support for any color chattext
+	public static void sendChat(PlayerEntity p, String chatMessage, TextFormatting textColor) {
+		StringTextComponent component = new StringTextComponent (chatMessage);
+		Style chatStyle = Style.field_240709_b_.func_240712_a_(textColor);
+		p.sendMessage(component.func_230530_a_(chatStyle) , p.getUniqueID());
+	}
+	
+	// support for any color, optionally bold text.
+	public static void sendChat(PlayerEntity p, String chatMessage, TextFormatting textColor, boolean boldText) {
+		StringTextComponent component = new StringTextComponent (chatMessage);
+		// set to Dark Green Bold
+		Style chatStyle = Style.field_240709_b_.func_240712_a_(textColor).func_240713_a_(boldText);
+		p.sendMessage(component.func_230530_a_(chatStyle) , p.getUniqueID());
+	}	
 	public static void bakeConfig()
 	{
 		aDebugLevel = SERVER.debugLevel.get();
@@ -80,6 +102,7 @@ public class MyConfig {
 				+ "minecraft:sand,-1;"
 				+ "minecraft:stone_brick_slab,3;"
 				;
+
 		
 		public Server(ForgeConfigSpec.Builder builder) {
 			builder.push("Happy Trail Control Values");

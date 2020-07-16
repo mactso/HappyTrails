@@ -29,10 +29,10 @@ public class PlayerMoveEvent {
 		ServerPlayerEntity aPlayer = (ServerPlayerEntity) event.player;
 		World w = aPlayer.world;
 		// w.getPlayers().size();
-
-		Block b = w.getBlockState(aPlayer.getPosition()).getBlock();
+		BlockPos playerBlockPos = aPlayer.func_233580_cy_();
+		Block b = w.getBlockState(playerBlockPos).getBlock();
         if (b == Blocks.AIR) {
-            b = aPlayer.world.getBlockState(aPlayer.getPosition().down()).getBlock();		            	
+            b = aPlayer.world.getBlockState(playerBlockPos.down()).getBlock();		            	
         } 
         
 		//String registeryName = b.getRegistryName().toString();

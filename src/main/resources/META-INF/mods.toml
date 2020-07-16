@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[30,)"
+loaderVersion="[32,)"
 [[mods]]
 modId="ht"
 version="${file.jarVersion}"
@@ -11,13 +11,13 @@ description='''Happy Trails Mod.'''
 [[dependencies.ht]]
     modId="forge"
     mandatory=true
-    versionRange="[30,)"
+    versionRange="[32,)"
     ordering="NONE"
     side="SERVER"
 
 [[dependencies.ht]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.1,1.16)"
+    versionRange="[1.16.1]"
     ordering="NONE"
     side="SERVER"

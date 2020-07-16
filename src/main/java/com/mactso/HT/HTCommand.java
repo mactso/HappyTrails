@@ -5,17 +5,15 @@ import com.mactso.HT.config.TrailBlockManager;
 import com.mactso.HT.config.TrailBlockManager.TrailBlockItem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.arguments.BoolArgumentType;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
-import net.minecraft.dispenser.Position;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 
 public class HTCommand {
@@ -58,29 +56,31 @@ public class HTCommand {
 			)		
 		.then(Commands.literal("info").executes(ctx -> {
 					ServerPlayerEntity p = ctx.getSource().asPlayer();
+					BlockPos playerBlockPos = p.func_233580_cy_();
 					World worldName = p.world;
-		            ITextComponent component = new StringTextComponent (worldName.getDimension().getType().getRegistryName() 
-		            		+ "\n Current Values");
-		            component.applyTextStyle(TextFormatting.BOLD);
-		            component.applyTextStyle(TextFormatting.DARK_GREEN);
-		            p.sendMessage(component);
-		            Block b = p.world.getBlockState(p.getPosition()).getBlock();
+			        DimensionType dimensionType = p.world.func_230315_m_();
+			        int dimensionNumber = dimensionType.func_241513_m_();
+			        String dimensionName = p.world.func_234923_W_().func_240901_a_().toString();
+			        
+			        String chatMessage = "Dimension: " + dimensionName + "\n Current Values";
+			        MyConfig.sendChat (p,chatMessage,TextFormatting.DARK_GREEN, MyConfig.BOLD);
+			        
+		            Block b = p.world.getBlockState(playerBlockPos).getBlock();
 		            if (b == Blocks.AIR) {
-			            b = p.world.getBlockState(p.getPosition().down()).getBlock();		            	
+			            b = p.world.getBlockState(playerBlockPos.down()).getBlock();		            	
 		            }
 		            TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
 		            int speed = 0;
 		            if (t != null) {
 			            speed = t.getTrailBlockSpeed();
 		            }
-		            component = new StringTextComponent (
+		            chatMessage = 
 		              		  "\n  Speed Level...........: " + speed
 		            		+ "\n  Standing On...........: " + b.getRegistryName().toString()
-		              		+ "\n  Player Position.......: " + p.getPosition().toString()		            		
+		              		+ "\n  Player Position.......: " + playerBlockPos.toString()		            		
 		              		+ "\n  Debug Level...........: " + MyConfig.aDebugLevel	
-		            		);
-		            component.applyTextStyle(TextFormatting.DARK_GREEN);
-		            p.sendMessage(component);
+		            		;
+			        MyConfig.sendChat (p,chatMessage);
 					return 1;
 					// return 1;
 			}
@@ -103,11 +103,12 @@ public class HTCommand {
 	}	
 	
 	public static int setSpeedForBlock (ServerPlayerEntity p, int newSpeedValue) {
-        Block b = p.world.getBlockState(p.getPosition()).getBlock();
-        if (b == Blocks.AIR) {
-            b = p.world.getBlockState(p.getPosition().down()).getBlock();		            	
+		BlockPos playerBlockPos = p.func_233580_cy_();
+        Block block = p.world.getBlockState(playerBlockPos).getBlock();
+        if (block == Blocks.AIR) {
+            block = p.world.getBlockState(playerBlockPos.down()).getBlock();		            	
         }
-        String key = b.getRegistryName().toString();
+        String key = block.getRegistryName().toString();
         TrailBlockManager.TrailBlockItem oldT = null;
         if (newSpeedValue  == 0 ) {
         	TrailBlockManager.trailBlockHashtable.remove(key);
