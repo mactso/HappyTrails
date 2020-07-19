@@ -48,7 +48,9 @@ public class PlayerMoveEvent {
 		}
 		
 		if (speed >= 1) {
-
+			if (speed == 11) {
+				speed = 22;
+			}
 			speed = speed - 1; // convert to 0 based.
     		
     		// This is tricky--- if the player has a more powerful effect, it sometimes

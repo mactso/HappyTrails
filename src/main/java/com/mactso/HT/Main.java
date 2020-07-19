@@ -5,6 +5,7 @@ import com.mactso.HT.config.MyConfig;
 import com.mactso.HT.events.PlayerMoveEvent;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -35,10 +36,15 @@ public class Main {
 			
 		}       
 
+		@SubscribeEvent 		
+		public void onCommandsRegistry(final RegisterCommandsEvent event) {
+			HTCommand.register(event.getDispatcher());			
+		}
+		
 		// in 14.4 and later, config file loads when the server starts when the world starts.
 		@SubscribeEvent 
 		public void onServerStarting (FMLServerStartingEvent event) {
-			HTCommand.register(event.getCommandDispatcher());
+
 		}
 }
 
