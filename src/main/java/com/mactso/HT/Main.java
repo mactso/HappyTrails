@@ -24,7 +24,7 @@ public class Main {
 
 			FMLJavaModLoadingContext.get().getModEventBus().register(this);
 	        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER,MyConfig.SERVER_SPEC );
-			MinecraftForge.EVENT_BUS.register(this);
+
 			
 	    }
 
@@ -36,16 +36,16 @@ public class Main {
 			
 		}       
 
-		@SubscribeEvent 		
-		public void onCommandsRegistry(final RegisterCommandsEvent event) {
-			HTCommand.register(event.getDispatcher());			
-		}
-		
-		// in 14.4 and later, config file loads when the server starts when the world starts.
-		@SubscribeEvent 
-		public void onServerStarting (FMLServerStartingEvent event) {
+	    @Mod.EventBusSubscriber()
+	    public static class ForgeEvents
+	    {
+			@SubscribeEvent 		
+			public void onCommandsRegistry(final RegisterCommandsEvent event) {
+				HTCommand.register(event.getDispatcher());			
+			}
 
-		}
+	    }
+
 }
 
 
