@@ -1,8 +1,8 @@
 // 15.2 - 0.0.0.1 Happy Trails
-package com.mactso.HT;
+package com.mactso.happytrails;
 
-import com.mactso.HT.config.MyConfig;
-import com.mactso.HT.events.PlayerMoveEvent;
+import com.mactso.happytrails.config.MyConfig;
+import com.mactso.happytrails.events.PlayerMoveEvent;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -14,10 +14,10 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
-@Mod("ht")
+@Mod("happytrails")
 public class Main {
 
-	    public static final String MODID = "ht"; 
+	    public static final String MODID = "happytrails"; 
 	    
 	    public Main()
 	    {
@@ -40,8 +40,9 @@ public class Main {
 	    public static class ForgeEvents
 	    {
 			@SubscribeEvent 		
-			public void onCommandsRegistry(final RegisterCommandsEvent event) {
-				HTCommand.register(event.getDispatcher());			
+			public static void onCommandsRegistry(final RegisterCommandsEvent event) {
+				System.out.println("Happy Trails: Registering Command Dispatcher");
+				HappyTrailsCommands.register(event.getDispatcher());			
 			}
 
 	    }

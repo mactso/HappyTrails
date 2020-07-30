@@ -1,8 +1,8 @@
-package com.mactso.HT;
+package com.mactso.happytrails;
 
-import com.mactso.HT.config.MyConfig;
-import com.mactso.HT.config.TrailBlockManager;
-import com.mactso.HT.config.TrailBlockManager.TrailBlockItem;
+import com.mactso.happytrails.config.MyConfig;
+import com.mactso.happytrails.config.TrailBlockManager;
+import com.mactso.happytrails.config.TrailBlockManager.TrailBlockItem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
@@ -16,7 +16,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 
-public class HTCommand {
+public class HappyTrailsCommands {
 	String subcommand = "";
 	String value = "";
 	

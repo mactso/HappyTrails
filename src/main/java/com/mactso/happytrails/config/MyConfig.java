@@ -1,8 +1,8 @@
-package com.mactso.HT.config;
+package com.mactso.happytrails.config;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.mactso.HT.Main;
+import com.mactso.happytrails.Main;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
@@ -101,6 +101,7 @@ public class MyConfig {
 				  "minecraft:grass_path,2;"
 				+ "minecraft:sand,-1;"
 				+ "minecraft:stone_brick_slab,3;"
+				+ "minecraft:bricks,11;"
 				;
 
 		

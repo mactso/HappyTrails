@@ -1,6 +1,6 @@
 //1.15.2-2.0
 
-package com.mactso.HT.config;
+package com.mactso.happytrails.config;
 
 
 import java.util.ArrayList;
