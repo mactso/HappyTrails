@@ -36,7 +36,7 @@ public class PlayerMoveEvent {
         } 
         
 		//String registeryName = b.getRegistryName().toString();
-		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
+			TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
 		
 		if (t==null) {  // standing on block with no configuration entry
 			return;

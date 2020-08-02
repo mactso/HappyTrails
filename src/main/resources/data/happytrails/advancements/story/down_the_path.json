@@ -1,0 +1,38 @@
+{
+  "parent": "minecraft:story/root",
+	"display": {
+		"title": {
+			"text": "Down The Path",
+			"color": "green"
+		},
+		"description": {
+			"text": "Right-click on grass with your shovel to make paths you can move faster on!",
+			"color": "green"
+		},
+		"icon": {
+			"item": "minecraft:stone_shovel",
+      		"nbt": "{Damage:0}"
+		}
+	},
+	"rewards": {
+		"experience": 3
+	},
+	"criteria": {
+		"inv_changed-minecraft:stone_shovel": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "minecraft:stone_shovel",
+						"nbt": "{Damage:0}"
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		[
+			"inv_changed-minecraft:stone_shovel"
+		]
+	]
+}
