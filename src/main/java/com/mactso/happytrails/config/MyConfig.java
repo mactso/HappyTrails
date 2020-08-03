@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.mactso.happytrails.Main;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
@@ -60,27 +61,28 @@ public class MyConfig {
 	public static void pushValues() {
 		SERVER.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsString());
 	}	
-    // for this mod- default color is green.
-	public static void sendChat(PlayerEntity p, String chatMessage) {
-		StringTextComponent component = new StringTextComponent (chatMessage);
-		// set to Dark Green Bold
-		Style chatStyle = Style.field_240709_b_.func_240712_a_(TextFormatting.DARK_GREEN);
-		p.sendMessage(component.func_230530_a_(chatStyle) , p.getUniqueID());
-	}
+	
+//    // for this mod- default color is green.
+//	public static void sendChat(PlayerEntity p, String chatMessage) {
+//		StringTextComponent component = new StringTextComponent (chatMessage);
+//		component.func_240701_a_(TextFormatting.DARK_GREEN);
+//		p.sendMessage(component, p.getUniqueID());
+//	}
 
 	// support for any color chattext
 	public static void sendChat(PlayerEntity p, String chatMessage, TextFormatting textColor) {
 		StringTextComponent component = new StringTextComponent (chatMessage);
-		Style chatStyle = Style.field_240709_b_.func_240712_a_(textColor);
-		p.sendMessage(component.func_230530_a_(chatStyle) , p.getUniqueID());
+		component.func_240701_a_(textColor);
+		p.sendMessage(component, p.getUniqueID());
 	}
 	
 	// support for any color, optionally bold text.
-	public static void sendChat(PlayerEntity p, String chatMessage, TextFormatting textColor, boolean boldText) {
+	public static void sendBoldChat(PlayerEntity p, String chatMessage, TextFormatting textColor) {
 		StringTextComponent component = new StringTextComponent (chatMessage);
-		// set to Dark Green Bold
-		Style chatStyle = Style.field_240709_b_.func_240712_a_(textColor).func_240713_a_(boldText);
-		p.sendMessage(component.func_230530_a_(chatStyle) , p.getUniqueID());
+
+		component.func_240701_a_(TextFormatting.BOLD);
+		component.func_240701_a_(textColor);
+		p.sendMessage(component, p.getUniqueID());
 	}	
 	public static void bakeConfig()
 	{

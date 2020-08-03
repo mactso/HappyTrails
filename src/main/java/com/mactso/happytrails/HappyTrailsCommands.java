@@ -63,7 +63,7 @@ public class HappyTrailsCommands {
 			        String dimensionName = p.world.func_234923_W_().func_240901_a_().toString();
 			        
 			        String chatMessage = "Dimension: " + dimensionName + "\n Current Values";
-			        MyConfig.sendChat (p,chatMessage,TextFormatting.DARK_GREEN, MyConfig.BOLD);
+			        MyConfig.sendBoldChat (p,chatMessage,TextFormatting.DARK_GREEN);
 			        
 		            Block b = p.world.getBlockState(playerBlockPos).getBlock();
 		            if (b == Blocks.AIR) {
@@ -80,7 +80,7 @@ public class HappyTrailsCommands {
 		              		+ "\n  Player Position.......: " + playerBlockPos.toString()		            		
 		              		+ "\n  Debug Level...........: " + MyConfig.aDebugLevel	
 		            		;
-			        MyConfig.sendChat (p,chatMessage);
+			        MyConfig.sendChat (p,chatMessage,TextFormatting.GREEN);
 					return 1;
 					// return 1;
 			}
