@@ -22,10 +22,12 @@ public class PlayerMoveEvent {
     public void PlayerMove(PlayerTickEvent event) { 
     	final int THREE_SECONDS = 60;
 
+        
     	if (!(event.player instanceof ServerPlayerEntity)) {
     		return;
     	}
-   	
+    	
+    	
 		ServerPlayerEntity aPlayer = (ServerPlayerEntity) event.player;
 		World w = aPlayer.world;
 		// w.getPlayers().size();
@@ -43,6 +45,26 @@ public class PlayerMoveEvent {
 		}
 
 		int speed = t.getTrailBlockSpeed();
+		boolean happyStepAssist = true;
+		float happyStepHeight = 2.6f;
+		
+		if (MyConfig.aDebugLevel > 1) {
+			System.out.println("Happy Trails:  PrePlayer.StepHeight : " + event.player.stepHeight);
+		}
+
+		if (happyStepAssist) {
+			if (event.player.stepHeight != happyStepHeight) {
+				event.player.stepHeight = happyStepHeight;
+			}
+		}
+		else {
+			event.player.stepHeight = 1.0f;
+		}
+
+		if (MyConfig.aDebugLevel > 1) {
+			System.out.println("Happy Trails:  PostPlayer.StepHeight : " + event.player.stepHeight);
+		}
+
 		if (speed == 0) { // Happy Trails (temporarily) Disabled for Entry
 			return;
 		}
@@ -55,11 +77,15 @@ public class PlayerMoveEvent {
     		// sticks "on" and won't expire so remove it once it has half a second left.
  			EffectInstance ei = aPlayer.getActivePotionEffect(Effects.SPEED);
     		if (ei != null) {
-    			if (ei.getDuration() > 10) {
-    				return;
-    			}
-    			if (ei.getAmplifier() > speed) {
+    			if (speed > ei.getAmplifier()) {
     				aPlayer.removeActivePotionEffect(Effects.SPEED );
+    			} else {
+    				if (ei.getDuration() > 10) {
+    					return;
+    				}
+    				if (ei.getAmplifier() > speed) {
+    				aPlayer.removeActivePotionEffect(Effects.SPEED );
+    				}
     			}
     		}
 			aPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, THREE_SECONDS, speed, true, MyConfig.aParticlesOn  ));

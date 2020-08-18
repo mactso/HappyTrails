@@ -108,7 +108,8 @@ public class HTCommand {
             b = p.world.getBlockState(p.getPosition().down()).getBlock();		            	
         }
         String key = b.getRegistryName().toString();
-        TrailBlockManager.TrailBlockItem oldT = null;
+        @SuppressWarnings("unused")
+		TrailBlockManager.TrailBlockItem oldT = null;
         if (newSpeedValue  == 0 ) {
         	TrailBlockManager.trailBlockHashtable.remove(key);
         } else {
