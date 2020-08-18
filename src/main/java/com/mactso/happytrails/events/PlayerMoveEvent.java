@@ -57,11 +57,16 @@ public class PlayerMoveEvent {
     		// sticks "on" and won't expire so remove it once it has half a second left.
  			EffectInstance ei = aPlayer.getActivePotionEffect(Effects.SPEED);
     		if (ei != null) {
-    			if (ei.getDuration() > 10) {
-    				return;
-    			}
-    			if (ei.getAmplifier() > speed) {
+    			// handle going from a slower road to a faster road.
+    			if (speed > ei.getAmplifier()) {
     				aPlayer.removeActivePotionEffect(Effects.SPEED );
+    			} else {
+    				if (ei.getDuration() > 10) {
+    					return;
+    				}
+    				if (ei.getAmplifier() > speed) {
+    				aPlayer.removeActivePotionEffect(Effects.SPEED );
+    				}
     			}
     		}
 			aPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, THREE_SECONDS, speed, true, MyConfig.aParticlesOn  ));
