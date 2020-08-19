@@ -46,7 +46,7 @@ public class PlayerMoveEvent {
 		if (speed == 0) { // Happy Trails (temporarily) Disabled for Entry
 			return;
 		}
-		
+
 		if (speed >= 1) {
 			if (speed == 11) {
 				speed = 22;

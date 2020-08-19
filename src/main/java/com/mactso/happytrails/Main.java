@@ -1,4 +1,4 @@
-// 15.2 - 0.0.0.1 Happy Trails
+// 15.2 -Happy Trails
 package com.mactso.happytrails;
 
 import com.mactso.happytrails.config.MyConfig;
@@ -13,6 +13,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+
 
 @Mod("happytrails")
 public class Main {
