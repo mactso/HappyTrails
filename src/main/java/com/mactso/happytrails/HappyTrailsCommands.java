@@ -12,6 +12,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
@@ -56,14 +57,13 @@ public class HappyTrailsCommands {
 			)		
 		.then(Commands.literal("info").executes(ctx -> {
 					ServerPlayerEntity p = ctx.getSource().asPlayer();
-					BlockPos playerBlockPos = p.func_233580_cy_();
+					BlockPos playerBlockPos = p.getPosition();
 					World worldName = p.world;
-			        DimensionType dimensionType = p.world.func_230315_m_();
-			        int dimensionNumber = dimensionType.func_241513_m_();
-			        String dimensionName = p.world.func_234923_W_().func_240901_a_().toString();
+
+			        String dimensionName = p.world.getDimensionType().toString();
 			        
 			        String chatMessage = "Dimension: " + dimensionName + "\n Current Values";
-			        MyConfig.sendBoldChat (p,chatMessage,TextFormatting.DARK_GREEN);
+			        MyConfig.sendBoldChat (p,chatMessage, Color.fromTextFormatting(TextFormatting.DARK_GREEN));
 			        
 		            Block b = p.world.getBlockState(playerBlockPos).getBlock();
 		            if (b == Blocks.AIR) {
@@ -80,7 +80,7 @@ public class HappyTrailsCommands {
 		              		+ "\n  Player Position.......: " + playerBlockPos.toString()		            		
 		              		+ "\n  Debug Level...........: " + MyConfig.aDebugLevel	
 		            		;
-			        MyConfig.sendChat (p,chatMessage,TextFormatting.GREEN);
+			        MyConfig.sendChat (p,chatMessage,Color.fromTextFormatting(TextFormatting.GREEN));
 					return 1;
 					// return 1;
 			}
@@ -103,17 +103,16 @@ public class HappyTrailsCommands {
 	}	
 	
 	public static int setSpeedForBlock (ServerPlayerEntity p, int newSpeedValue) {
-		BlockPos playerBlockPos = p.func_233580_cy_();
+		BlockPos playerBlockPos = p.getPosition();
         Block block = p.world.getBlockState(playerBlockPos).getBlock();
         if (block == Blocks.AIR) {
             block = p.world.getBlockState(playerBlockPos.down()).getBlock();		            	
         }
         String key = block.getRegistryName().toString();
-        TrailBlockManager.TrailBlockItem oldT = null;
         if (newSpeedValue  == 0 ) {
         	TrailBlockManager.trailBlockHashtable.remove(key);
         } else {
-        	oldT = TrailBlockManager.trailBlockHashtable.put(key, new TrailBlockItem(newSpeedValue));
+        	TrailBlockManager.trailBlockHashtable.put(key, new TrailBlockItem(newSpeedValue));
         }
 		MyConfig.pushValues();
 		return 1;

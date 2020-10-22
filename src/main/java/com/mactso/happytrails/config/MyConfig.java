@@ -5,10 +5,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.mactso.happytrails.Main;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
@@ -20,14 +18,14 @@ import net.minecraftforge.fml.config.ModConfig;
 @Mod.EventBusSubscriber(modid = Main.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MyConfig {
 	
-	public static final Server SERVER;
-	public static final ForgeConfigSpec SERVER_SPEC;
+	public static final Common COMMON;
+	public static final ForgeConfigSpec COMMON_SPEC;
 	
 	static
 	{
-		final Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
-		SERVER_SPEC = specPair.getRight();
-		SERVER = specPair.getLeft();
+		final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+		COMMON_SPEC = specPair.getRight();
+		COMMON = specPair.getLeft();
 	}	
 	
 //	public static int       aHappyTrailSpeed;
@@ -40,7 +38,7 @@ public class MyConfig {
 	@SubscribeEvent
 	public static void onModConfigEvent(final ModConfig.ModConfigEvent configEvent)
 	{
-		if (configEvent.getConfig().getSpec() == MyConfig.SERVER_SPEC)
+		if (configEvent.getConfig().getSpec() == MyConfig.COMMON_SPEC)
 		{
 			bakeConfig();
 			TrailBlockManager.trailBlockInit();
@@ -51,15 +49,15 @@ public class MyConfig {
 		if (aDebugLevel > 0) {
 			System.out.println("dbgL:"+MyConfig.aDebugLevel);
 		}
-		SERVER.debugLevel.set( MyConfig.aDebugLevel);
+		COMMON.debugLevel.set( MyConfig.aDebugLevel);
 	}
 
 	public static void pushNewParticlesOn() {
-		SERVER.particlesOn.set(MyConfig.aParticlesOn);
+		COMMON.particlesOn.set(MyConfig.aParticlesOn);
 	}
 	
 	public static void pushValues() {
-		SERVER.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsString());
+		COMMON.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsString());
 	}	
 	
 //    // for this mod- default color is green.
@@ -70,30 +68,31 @@ public class MyConfig {
 //	}
 
 	// support for any color chattext
-	public static void sendChat(PlayerEntity p, String chatMessage, TextFormatting textColor) {
+	public static void sendChat(PlayerEntity p, String chatMessage, Color textColor) {
 		StringTextComponent component = new StringTextComponent (chatMessage);
-		component.func_240701_a_(textColor);
+		component.getStyle().setColor(textColor);
 		p.sendMessage(component, p.getUniqueID());
 	}
 	
 	// support for any color, optionally bold text.
-	public static void sendBoldChat(PlayerEntity p, String chatMessage, TextFormatting textColor) {
+	public static void sendBoldChat(PlayerEntity p, String chatMessage, Color textColor) {
 		StringTextComponent component = new StringTextComponent (chatMessage);
 
-		component.func_240701_a_(TextFormatting.BOLD);
-		component.func_240701_a_(textColor);
+		component.getStyle().setBold(true);
+		component.getStyle().setColor(textColor);
+
 		p.sendMessage(component, p.getUniqueID());
 	}	
 	public static void bakeConfig()
 	{
-		aDebugLevel = SERVER.debugLevel.get();
-		defaultTrailBlocks6464 = SERVER.defaultTrailBlocksActual.get() ;
+		aDebugLevel = COMMON.debugLevel.get();
+		defaultTrailBlocks6464 = COMMON.defaultTrailBlocksActual.get() ;
 		if (aDebugLevel > 0) {
 			System.out.println("Happy Trails Debug: " + aDebugLevel );
 		}
 	}
 	
-	public static class Server {
+	public static class Common {
 
 //		public final IntValue	  happyTrailSpeed;
 		public final IntValue     debugLevel;
@@ -107,7 +106,7 @@ public class MyConfig {
 				;
 
 		
-		public Server(ForgeConfigSpec.Builder builder) {
+		public Common(ForgeConfigSpec.Builder builder) {
 			builder.push("Happy Trail Control Values");
 //			happyTrailSpeed= builder
 //					.comment("Happy Trail Speed: -11 to 11")
