@@ -4,16 +4,16 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.mactso.happytrails.Main;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MyConfig {
@@ -36,7 +36,7 @@ public class MyConfig {
 	public static final Boolean BOLD = true;
 	
 	@SubscribeEvent
-	public static void onModConfigEvent(final ModConfig.ModConfigEvent configEvent)
+	public static void onModConfigEvent(final ModConfigEvent configEvent)
 	{
 		if (configEvent.getConfig().getSpec() == MyConfig.COMMON_SPEC)
 		{
@@ -47,7 +47,7 @@ public class MyConfig {
 
 	public static void pushDebugValue() {
 		if (aDebugLevel > 0) {
-			System.out.println("dbgL:"+MyConfig.aDebugLevel);
+			System.out.println("Happy Trails Debug Level:"+MyConfig.aDebugLevel);
 		}
 		COMMON.debugLevel.set( MyConfig.aDebugLevel);
 	}
@@ -68,20 +68,20 @@ public class MyConfig {
 //	}
 
 	// support for any color chattext
-	public static void sendChat(PlayerEntity p, String chatMessage, Color textColor) {
-		StringTextComponent component = new StringTextComponent (chatMessage);
-		component.getStyle().setColor(textColor);
-		p.sendMessage(component, p.getUniqueID());
+	public static void sendChat(Player p, String chatMessage, TextColor textColor) {
+		TextComponent component = new TextComponent (chatMessage);
+		component.getStyle().withColor(textColor);
+		p.sendMessage(component, p.getUUID());
 	}
 	
 	// support for any color, optionally bold text.
-	public static void sendBoldChat(PlayerEntity p, String chatMessage, Color textColor) {
-		StringTextComponent component = new StringTextComponent (chatMessage);
+	public static void sendBoldChat(Player p, String chatMessage, TextColor textColor) {
+		TextComponent component = new TextComponent (chatMessage);
 
-		component.getStyle().setBold(true);
-		component.getStyle().setColor(textColor);
+		component.getStyle().withBold(true);
+		component.getStyle().withColor(textColor);
 
-		p.sendMessage(component, p.getUniqueID());
+		p.sendMessage(component, p.getUUID());
 	}	
 	public static void bakeConfig()
 	{
@@ -99,10 +99,11 @@ public class MyConfig {
 		public final BooleanValue particlesOn;
 		public final ConfigValue<String> defaultTrailBlocksActual;
 		public final String defaultTrailBlocks6464 = 
-				  "minecraft:grass_path,2;"
-				+ "minecraft:sand,-1;"
-				+ "minecraft:stone_brick_slab,3;"
-				+ "minecraft:bricks,11;"
+				"minecraft:diamond_block,11;" +
+				"minecraft:stone_brick,3;" + 
+				"minecraft:stone_brick_slab,3;" + 
+				"minecraft:dirt_path,2;" + 
+				"minecraft:sand,-1;"
 				;
 
 		

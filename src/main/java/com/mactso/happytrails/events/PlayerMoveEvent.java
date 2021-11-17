@@ -2,13 +2,13 @@ package com.mactso.happytrails.events;
 import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.config.TrailBlockManager;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;;
@@ -22,17 +22,17 @@ public class PlayerMoveEvent {
     public void PlayerMove(PlayerTickEvent event) { 
     	final int THREE_SECONDS = 60;
 
-    	if (!(event.player instanceof ServerPlayerEntity)) {
+    	if (!(event.player instanceof ServerPlayer)) {
     		return;
     	}
    	
-		ServerPlayerEntity aPlayer = (ServerPlayerEntity) event.player;
-		World w = aPlayer.world;
+		ServerPlayer aPlayer = (ServerPlayer) event.player;
+		Level w = aPlayer.level;
 		// w.getPlayers().size();
-		BlockPos playerBlockPos = aPlayer.getPosition();
+		BlockPos playerBlockPos = aPlayer.blockPosition();
 		Block b = w.getBlockState(playerBlockPos).getBlock();
         if (b == Blocks.AIR) {
-            b = aPlayer.world.getBlockState(playerBlockPos.down()).getBlock();		            	
+            b = aPlayer.level.getBlockState(playerBlockPos.below()).getBlock();		            	
         } 
         
 		//String registeryName = b.getRegistryName().toString();
@@ -55,33 +55,33 @@ public class PlayerMoveEvent {
     		
     		// This is tricky--- if the player has a more powerful effect, it sometimes
     		// sticks "on" and won't expire so remove it once it has half a second left.
- 			EffectInstance ei = aPlayer.getActivePotionEffect(Effects.SPEED);
+ 			MobEffectInstance ei = aPlayer.getEffect(MobEffects.MOVEMENT_SPEED);
     		if (ei != null) {
     			// handle going from a slower road to a faster road.
     			if (speed > ei.getAmplifier()) {
-    				aPlayer.removeActivePotionEffect(Effects.SPEED );
+    				aPlayer.removeEffect(MobEffects.MOVEMENT_SPEED);
     			} else {
     				if (ei.getDuration() > 10) {
     					return;
     				}
     				if (ei.getAmplifier() > speed) {
-    				aPlayer.removeActivePotionEffect(Effects.SPEED );
+        				aPlayer.removeEffect(MobEffects.MOVEMENT_SPEED);
     				}
     			}
     		}
-			aPlayer.addPotionEffect(new EffectInstance(Effects.SPEED, THREE_SECONDS, speed, true, MyConfig.aParticlesOn  ));
+			aPlayer.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, THREE_SECONDS, speed, true, MyConfig.aParticlesOn  ));
 		} else if (speed <=-1) {
 			speed =  (-speed ) - 1; // convert to 0 based positive value.
-			EffectInstance ei = aPlayer.getActivePotionEffect(Effects.SLOWNESS);
+			MobEffectInstance ei = aPlayer.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
     		if (ei != null) {
     			if (ei.getDuration() > 10) {
     				return;
     			}
     			if (ei.getAmplifier() > speed) {
-    				aPlayer.removeActivePotionEffect(Effects.SLOWNESS );
+    				aPlayer.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
     			}
     		}
-			aPlayer.addPotionEffect(new EffectInstance(Effects.SLOWNESS, THREE_SECONDS, speed, true, MyConfig.aParticlesOn ));
+			aPlayer.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, THREE_SECONDS, speed, true, MyConfig.aParticlesOn ));
 		}
 	}
 }

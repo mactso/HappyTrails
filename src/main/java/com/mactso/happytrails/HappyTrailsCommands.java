@@ -6,25 +6,25 @@ import com.mactso.happytrails.config.TrailBlockManager.TrailBlockItem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class HappyTrailsCommands {
 	String subcommand = "";
 	String value = "";
 	
-	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal("happytrails").requires((source) -> 
 			{
-				return source.hasPermissionLevel(2);
+				return source.hasPermission(2);
 			}
 		)
 		.then(Commands.literal("debugLevel").then(
@@ -49,24 +49,24 @@ public class HappyTrailsCommands {
 		// update or add a speed value for the block the player is standing on.
 		.then(Commands.literal("setHappyTrailSpeed").then(
 				Commands.argument("setHappyTrailSpeed", IntegerArgumentType.integer(-11,11)).executes(ctx -> {
-					return setSpeedForBlock(ctx.getSource().asPlayer(), IntegerArgumentType.getInteger(ctx, "setHappyTrailSpeed"));
+					return setSpeedForBlock(ctx.getSource().getPlayerOrException(), IntegerArgumentType.getInteger(ctx, "setHappyTrailSpeed"));
 			}
 			)
 			)
 			)		
 		.then(Commands.literal("info").executes(ctx -> {
-					ServerPlayerEntity p = ctx.getSource().asPlayer();
-					BlockPos playerBlockPos = p.getPosition();
-					World worldName = p.world;
+					ServerPlayer p = ctx.getSource().getPlayerOrException();
+					BlockPos playerBlockPos = p.blockPosition();
+					Level worldName = p.level;
 
-			        String dimensionName = p.world.getDimensionType().toString();
+			        String dimensionName = p.level.dimensionType().toString();
 			        
 			        String chatMessage = "Dimension: " + dimensionName + "\n Current Values";
-			        MyConfig.sendBoldChat (p,chatMessage, Color.fromTextFormatting(TextFormatting.DARK_GREEN));
+			        MyConfig.sendBoldChat (p,chatMessage, TextColor.fromLegacyFormat(ChatFormatting.DARK_GREEN));
 			        
-		            Block b = p.world.getBlockState(playerBlockPos).getBlock();
+		            Block b = p.level.getBlockState(playerBlockPos).getBlock();
 		            if (b == Blocks.AIR) {
-			            b = p.world.getBlockState(playerBlockPos.down()).getBlock();		            	
+			            b = p.level.getBlockState(playerBlockPos.below()).getBlock();		            	
 		            }
 		            TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
 		            int speed = 0;
@@ -79,7 +79,7 @@ public class HappyTrailsCommands {
 		              		+ "\n  Player Position.......: " + playerBlockPos.toString()		            		
 		              		+ "\n  Debug Level...........: " + MyConfig.aDebugLevel	
 		            		;
-			        MyConfig.sendChat (p,chatMessage,Color.fromTextFormatting(TextFormatting.GREEN));
+			        MyConfig.sendChat (p,chatMessage,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
 					return 1;
 					// return 1;
 			}
@@ -101,11 +101,11 @@ public class HappyTrailsCommands {
 		return 1;
 	}	
 	
-	public static int setSpeedForBlock (ServerPlayerEntity p, int newSpeedValue) {
-		BlockPos playerBlockPos = p.getPosition();
-        Block block = p.world.getBlockState(playerBlockPos).getBlock();
+	public static int setSpeedForBlock (ServerPlayer p, int newSpeedValue) {
+		BlockPos playerBlockPos = p.blockPosition();
+        Block block = p.level.getBlockState(playerBlockPos).getBlock();
         if (block == Blocks.AIR) {
-            block = p.world.getBlockState(playerBlockPos.down()).getBlock();		            	
+            block = p.level.getBlockState(playerBlockPos.below()).getBlock();		            	
         }
         String key = block.getRegistryName().toString();
         if (newSpeedValue  == 0 ) {
