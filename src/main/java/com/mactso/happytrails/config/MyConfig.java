@@ -60,13 +60,6 @@ public class MyConfig {
 		COMMON.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsString());
 	}	
 	
-//    // for this mod- default color is green.
-//	public static void sendChat(PlayerEntity p, String chatMessage) {
-//		StringTextComponent component = new StringTextComponent (chatMessage);
-//		component.func_240701_a_(TextFormatting.DARK_GREEN);
-//		p.sendMessage(component, p.getUniqueID());
-//	}
-
 	// support for any color chattext
 	public static void sendChat(Player p, String chatMessage, TextColor textColor) {
 		TextComponent component = new TextComponent (chatMessage);
@@ -99,20 +92,15 @@ public class MyConfig {
 		public final BooleanValue particlesOn;
 		public final ConfigValue<String> defaultTrailBlocksActual;
 		public final String defaultTrailBlocks6464 = 
-				"minecraft:diamond_block,11;" +
-				"minecraft:stone_brick,3;" + 
-				"minecraft:stone_brick_slab,3;" + 
-				"minecraft:dirt_path,2;" + 
-				"minecraft:sand,-1;"
-				;
-
+		"minecraft:cut_copper_slab,22;minecraft:tall_grass,-30;"
+		+ "minecraft:exposed_cut_copper_slab,33;minecraft:fern,-22;"
+		+ "minecraft:grass,-22;minecraft:diamond_block,99;"
+		+ "minecraft:water,11;minecraft:dirt_path,11;"
+		+ "minecraft:stone_brick_slab,33;minecraft:weathered_cut_copper_slab,44;"
+		+ "minecraft:stone_bricks,33;minecraft:large_fern,-30;minecraft:sand,-22;";
 		
 		public Common(ForgeConfigSpec.Builder builder) {
 			builder.push("Happy Trail Control Values");
-//			happyTrailSpeed= builder
-//					.comment("Happy Trail Speed: -11 to 11")
-//					.translation(Main.MODID + ".config." + "happyTrailSpeed")
-//					.defineInRange("happyTrailSpeed", () -> -11, 1, 11);
 			
 			debugLevel = builder
 					.comment("Debug Level: 0 = Off, 1 = Log, 2 = Chat+Log")

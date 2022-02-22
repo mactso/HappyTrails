@@ -3,6 +3,7 @@ package com.mactso.happytrails;
 
 import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.events.PlayerMoveEvent;
+import com.mactso.happytrails.events.SteedMoveEvent;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -33,7 +34,7 @@ public class Main {
 		public void preInit (final FMLCommonSetupEvent event) {
 			System.out.println("Happy Trails: Registering Handler");
 			MinecraftForge.EVENT_BUS.register(new PlayerMoveEvent ());
-			
+			MinecraftForge.EVENT_BUS.register(new SteedMoveEvent ());			
 		}       
 
 	    @Mod.EventBusSubscriber()

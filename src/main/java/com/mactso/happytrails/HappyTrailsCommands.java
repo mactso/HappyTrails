@@ -12,9 +12,11 @@ import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class HappyTrailsCommands {
 	String subcommand = "";
@@ -45,15 +47,22 @@ public class HappyTrailsCommands {
 			)
 			)
 			)
-
 		// update or add a speed value for the block the player is standing on.
 		.then(Commands.literal("setHappyTrailSpeed").then(
-				Commands.argument("setHappyTrailSpeed", IntegerArgumentType.integer(-11,11)).executes(ctx -> {
+				Commands.argument("setHappyTrailSpeed", IntegerArgumentType.integer(-99,99)).executes(ctx -> {
 					return setSpeedForBlock(ctx.getSource().getPlayerOrException(), IntegerArgumentType.getInteger(ctx, "setHappyTrailSpeed"));
 			}
 			)
 			)
 			)		
+		.then(Commands.literal("report").executes(ctx -> {
+			ServerPlayer p = ctx.getSource().getPlayerOrException();
+			String report = "Configured Blocks : " + TrailBlockManager.getTrailHashAsString();
+	        MyConfig.sendChat (p,report,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
+			return 1;
+		}
+		)
+		)
 		.then(Commands.literal("info").executes(ctx -> {
 					ServerPlayer p = ctx.getSource().getPlayerOrException();
 					BlockPos playerBlockPos = p.blockPosition();
@@ -63,9 +72,9 @@ public class HappyTrailsCommands {
 			        
 			        String chatMessage = "Dimension: " + dimensionName + "\n Current Values";
 			        MyConfig.sendBoldChat (p,chatMessage, TextColor.fromLegacyFormat(ChatFormatting.DARK_GREEN));
-			        
+			        BlockState bs = p.level.getBlockState(playerBlockPos);
 		            Block b = p.level.getBlockState(playerBlockPos).getBlock();
-		            if (b == Blocks.AIR) {
+		            if (bs.isAir()) {
 			            b = p.level.getBlockState(playerBlockPos.below()).getBlock();		            	
 		            }
 		            TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
@@ -103,8 +112,9 @@ public class HappyTrailsCommands {
 	
 	public static int setSpeedForBlock (ServerPlayer p, int newSpeedValue) {
 		BlockPos playerBlockPos = p.blockPosition();
+        BlockState bs = p.level.getBlockState(playerBlockPos);
         Block block = p.level.getBlockState(playerBlockPos).getBlock();
-        if (block == Blocks.AIR) {
+        if (bs.isAir()) {
             block = p.level.getBlockState(playerBlockPos.below()).getBlock();		            	
         }
         String key = block.getRegistryName().toString();

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.lang.String;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -66,13 +67,14 @@ public class TrailBlockManager {
 				String key = modAndBlock;
 				String speed = st.nextToken();
 				int tHappyTrailSpeed = Integer.parseInt(speed.trim());
-				if ((tHappyTrailSpeed < -11) || (tHappyTrailSpeed > 11)) {
+				if ((tHappyTrailSpeed < -99) || (tHappyTrailSpeed > 99)) {
 					tHappyTrailSpeed = 2;
 				}
 
+
 				trailBlockHashtable.put(key, new TrailBlockItem(tHappyTrailSpeed));
-				if (!modAndBlock.contentEquals("hbm:default") &&
-				    !ForgeRegistries.ITEMS.containsKey(new ResourceLocation(modAndBlock))
+				if (!modAndBlock.equals("hbm:default") &&
+				    !ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(modAndBlock))
 				   )  {
 					System.out.println("Happy Trails: Block: " + modAndBlock + " not in Forge Registry.  Mispelled?");
 				}
@@ -81,11 +83,6 @@ public class TrailBlockManager {
 			}
 			i++;
 		}
-
-//		if (getTrailBlockSpeed(defaultTrailBlockString) == null) {
-//			int tHappyTrailsSpeed = 2;
-//			trailBlockHashtable.put(defaultTrailBlockString, new TrailBlockItem(tHappyTrailsSpeed));
-//		}
 
 	}
 
