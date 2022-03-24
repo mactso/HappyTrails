@@ -27,7 +27,6 @@ public class Utility {
 		AttributeModifier am = le.getAttribute(Attributes.MOVEMENT_SPEED).getModifier(UUID_HAPPYMODSPEED);
 		if (Math.abs(amplifier)<=10) {
 			if (am != null) {
-				System.out.println("Removed speed mod : " + am.getAmount());
 				le.getAttribute(Attributes.MOVEMENT_SPEED).removePermanentModifier(UUID_HAPPYMODSPEED); 
 			}
 			return false;
@@ -66,6 +65,9 @@ public class Utility {
 
 	public static void updateEffect(LivingEntity e, int amplifier,  MobEffect mobEffect) {
 		MobEffectInstance ei = e.getEffect(mobEffect);
+		if (amplifier == 10) {
+			amplifier = 20;  // player "plaid" speed.
+		}
 		if (ei != null) {
 			if (amplifier > ei.getAmplifier()) {
 				e.removeEffect(mobEffect);
@@ -78,8 +80,6 @@ public class Utility {
 			}
 			e.removeEffect(mobEffect);			
 		}
-		if (mobEffect == MobEffects.MOVEMENT_SPEED) System.out.print("Speed - ");
-		if (mobEffect == MobEffects.MOVEMENT_SLOWDOWN) System.out.print("Slow - ");
 		e.addEffect(new MobEffectInstance(mobEffect, TWO_SECONDS, amplifier, true, MyConfig.aParticlesOn  ));
 		return;
 	}

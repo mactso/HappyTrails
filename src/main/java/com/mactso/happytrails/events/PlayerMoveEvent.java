@@ -29,10 +29,6 @@ public class PlayerMoveEvent {
 
 		// permanent
 		if (amplifier >= 1) {
-
-			if (amplifier == 10) {
-				amplifier = 20;  // player "plaid" speed.
-			}
 			amplifier = amplifier - 1; // convert to 0 based.
 			Utility.updateEffect((LivingEntity) aPlayer, amplifier, MobEffects.MOVEMENT_SPEED);
 		} else if (amplifier <= -1) {
