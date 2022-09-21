@@ -4,15 +4,16 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
+
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class SteedMoveEvent {
 
 	@SubscribeEvent
-	public void SteedMove(LivingUpdateEvent event) {
+	public void SteedMove(LivingTickEvent event) {
 
-		LivingEntity le = event.getEntityLiving();
+		LivingEntity le = event.getEntity();
 		Level level = le.level;
 
 		if (level.isClientSide()) {
@@ -22,9 +23,9 @@ public class SteedMoveEvent {
 			return;
 		}
 		if (le.getFirstPassenger() instanceof ServerPlayer spe) {
-			int amplifier = Utility.getSpeedAmplifier(le, level);
+			int amplifier = HappyUtility.getSpeedAmplifier(le, level);
 
-			if (Utility.applyMovementSpeedAttribute(le, amplifier)) {
+			if (HappyUtility.applyMovementSpeedAttribute(le, amplifier)) {
 				return;
 			}
 
@@ -33,10 +34,10 @@ public class SteedMoveEvent {
 					amplifier = 12; // steed plaid speed
 				}
 				amplifier = amplifier - 1; // convert to 0 based.
-				Utility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SPEED);
+				HappyUtility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SPEED);
 			} else if (amplifier <= -1) {
 				amplifier = (-amplifier) - 1; // convert to 0 based positive value.
-				Utility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SLOWDOWN);
+				HappyUtility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SLOWDOWN);
 			}
 		}
 	}

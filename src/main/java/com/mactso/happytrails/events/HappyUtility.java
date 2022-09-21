@@ -5,9 +5,9 @@ import java.util.UUID;
 import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.config.TrailBlockManager;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
-public class Utility {
+public class HappyUtility {
 	final static int TWO_SECONDS = 40;
 	
 	static UUID UUID_HAPPYMODSPEED = UUID.fromString("793fcced-972d-45cb-b385-84694056001a");
@@ -86,11 +86,13 @@ public class Utility {
 	
 	public static int getSpeedAmplifier(LivingEntity le, Level level) {
 		Block b = level.getBlockState(le.blockPosition()).getBlock();
-		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
+        ResourceLocation key = b.builtInRegistryHolder().key().location();
+		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(key.toString());
 		
 		if (t == null) { // standing on/in block with no configuration entry
 			b = le.level.getBlockState(le.blockPosition().below()).getBlock();
-			t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
+	        key = b.builtInRegistryHolder().key().location();
+			t = TrailBlockManager.getTrailBlockInfo(key.toString());
 			if (t == null) { // lower block also has no configuration entry
 				return 0;
 			}

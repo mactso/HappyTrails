@@ -4,8 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.mactso.happytrails.Main;
 
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
+
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
@@ -29,6 +28,10 @@ public class MyConfig {
 	}	
 	
 //	public static int       aHappyTrailSpeed;
+	public static int getDebugLevel() {
+		return aDebugLevel;
+	}
+
 	public static int       aDebugLevel;
 	public static boolean   aParticlesOn;
 	public static String[]  defaultTrailBlocks;
@@ -60,22 +63,7 @@ public class MyConfig {
 		COMMON.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsString());
 	}	
 	
-	// support for any color chattext
-	public static void sendChat(Player p, String chatMessage, TextColor textColor) {
-		TextComponent component = new TextComponent (chatMessage);
-		component.getStyle().withColor(textColor);
-		p.sendMessage(component, p.getUUID());
-	}
-	
-	// support for any color, optionally bold text.
-	public static void sendBoldChat(Player p, String chatMessage, TextColor textColor) {
-		TextComponent component = new TextComponent (chatMessage);
 
-		component.getStyle().withBold(true);
-		component.getStyle().withColor(textColor);
-
-		p.sendMessage(component, p.getUUID());
-	}	
 	public static void bakeConfig()
 	{
 		aDebugLevel = COMMON.debugLevel.get();
@@ -123,5 +111,6 @@ public class MyConfig {
 			builder.pop();			
 		}
 	}
+
 	
 }

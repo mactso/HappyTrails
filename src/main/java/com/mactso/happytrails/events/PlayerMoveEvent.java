@@ -22,18 +22,18 @@ public class PlayerMoveEvent {
 		ServerPlayer aPlayer = (ServerPlayer) event.player;
 		Level level = aPlayer.level;
 
-		int amplifier = Utility.getSpeedAmplifier(aPlayer, level);
-		if (Utility.applyMovementSpeedAttribute(aPlayer, amplifier)) {
+		int amplifier = HappyUtility.getSpeedAmplifier(aPlayer, level);
+		if (HappyUtility.applyMovementSpeedAttribute(aPlayer, amplifier)) {
 			return;
 		}
 
 		// permanent
 		if (amplifier >= 1) {
 			amplifier = amplifier - 1; // convert to 0 based.
-			Utility.updateEffect((LivingEntity) aPlayer, amplifier, MobEffects.MOVEMENT_SPEED);
+			HappyUtility.updateEffect((LivingEntity) aPlayer, amplifier, MobEffects.MOVEMENT_SPEED);
 		} else if (amplifier <= -1) {
 			amplifier = (-amplifier) - 1; // convert to 0 based positive value.
-			Utility.updateEffect((LivingEntity) aPlayer, amplifier, MobEffects.MOVEMENT_SLOWDOWN);
+			HappyUtility.updateEffect((LivingEntity) aPlayer, amplifier, MobEffects.MOVEMENT_SLOWDOWN);
 		}		
 	}
 }

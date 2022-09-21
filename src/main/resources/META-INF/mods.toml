@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[39,)"
+loaderVersion="[41,)"
 license="MIT License"
 [[mods]]
 modId="happytrails"
@@ -7,20 +7,19 @@ version="${file.jarVersion}"
 displayName="Happy Trails Mod"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/happy-trails"
 updateJSONURL="https://github.com/mactso/happytrails/raw/main/update.json"
-
 logoFile="HappyTrailsForgeMod.png"
 authors="MacTso, Lupicus"
-description='''Happy Trails Mod.'''
+description='Happy Trails Mod.'
 [[dependencies.happytrails]]
     modId="forge"
     mandatory=true
-    versionRange="[39,)"
+    versionRange="[41,)"
     ordering="NONE"
     side="SERVER"
 
 [[dependencies.happytrails]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.1,1.19)"
+    versionRange="[1.19,1.20)"
     ordering="NONE"
     side="SERVER"

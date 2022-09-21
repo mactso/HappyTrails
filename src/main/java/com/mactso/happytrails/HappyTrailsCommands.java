@@ -3,6 +3,7 @@ package com.mactso.happytrails;
 import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.config.TrailBlockManager;
 import com.mactso.happytrails.config.TrailBlockManager.TrailBlockItem;
+import com.mactso.happytrails.utility.Utility;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
@@ -10,12 +11,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class HappyTrailsCommands {
@@ -57,8 +57,8 @@ public class HappyTrailsCommands {
 			)		
 		.then(Commands.literal("report").executes(ctx -> {
 			ServerPlayer p = ctx.getSource().getPlayerOrException();
-			String report = "Configured Blocks : " + TrailBlockManager.getTrailHashAsString();
-	        MyConfig.sendChat (p,report,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
+			String chatMessage = "Configured Blocks : " + TrailBlockManager.getTrailHashAsString();
+	        Utility.sendChat ((Player)p,chatMessage,ChatFormatting.GREEN);
 			return 1;
 		}
 		)
@@ -71,25 +71,24 @@ public class HappyTrailsCommands {
 			        String dimensionName = p.level.dimensionType().toString();
 			        
 			        String chatMessage = "Dimension: " + dimensionName + "\n Current Values";
-			        MyConfig.sendBoldChat (p,chatMessage, TextColor.fromLegacyFormat(ChatFormatting.DARK_GREEN));
-			        BlockState bs = p.level.getBlockState(playerBlockPos);
+			        Utility.sendChat ((Player)p,chatMessage,ChatFormatting.GREEN);			        BlockState bs = p.level.getBlockState(playerBlockPos);
 		            Block b = p.level.getBlockState(playerBlockPos).getBlock();
 		            if (bs.isAir()) {
 			            b = p.level.getBlockState(playerBlockPos.below()).getBlock();		            	
 		            }
-		            TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryName().toString());
+		            ResourceLocation key = b.builtInRegistryHolder().key().location();
+		            TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(key.toString());
 		            int speed = 0;
 		            if (t != null) {
 			            speed = t.getTrailBlockSpeed();
 		            }
 		            chatMessage = 
 		              		  "\n  Speed Level...........: " + speed
-		            		+ "\n  Standing On...........: " + b.getRegistryName().toString()
+		            		+ "\n  Standing On...........: " + key.toString()
 		              		+ "\n  Player Position.......: " + playerBlockPos.toString()		            		
 		              		+ "\n  Debug Level...........: " + MyConfig.aDebugLevel	
 		            		;
-			        MyConfig.sendChat (p,chatMessage,TextColor.fromLegacyFormat(ChatFormatting.GREEN));
-					return 1;
+			        Utility.sendChat ((Player)p,chatMessage,ChatFormatting.AQUA);					return 1;
 					// return 1;
 			}
 			)
@@ -117,7 +116,8 @@ public class HappyTrailsCommands {
         if (bs.isAir()) {
             block = p.level.getBlockState(playerBlockPos.below()).getBlock();		            	
         }
-        String key = block.getRegistryName().toString();
+        String key = block.builtInRegistryHolder().key().location().toString();
+
         if (newSpeedValue  == 0 ) {
         	TrailBlockManager.trailBlockHashtable.remove(key);
         } else {
