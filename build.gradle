@@ -85,7 +85,7 @@ minecraft {
             property 'forge.enabledGameTestNamespaces', 'spawnbalanceutility'
 
             mods {
-                spawnbalanceutility {
+                happytrails {
                     source sourceSets.main
                 }
             }

@@ -29,6 +29,7 @@ public class PlayerMoveEvent {
 
 		// permanent
 		if (amplifier >= 1) {
+			if (amplifier == 10) amplifier = 30; // plaid speed
 			amplifier = amplifier - 1; // convert to 0 based.
 			HappyUtility.updateEffect((LivingEntity) aPlayer, amplifier, MobEffects.MOVEMENT_SPEED);
 		} else if (amplifier <= -1) {

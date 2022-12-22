@@ -4,8 +4,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.mactso.happytrails.Main;
 
-
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
@@ -27,7 +25,6 @@ public class MyConfig {
 		COMMON = specPair.getLeft();
 	}	
 	
-//	public static int       aHappyTrailSpeed;
 	public static int getDebugLevel() {
 		return aDebugLevel;
 	}
@@ -60,7 +57,7 @@ public class MyConfig {
 	}
 	
 	public static void pushValues() {
-		COMMON.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsString());
+		COMMON.defaultTrailBlocksActual.set(TrailBlockManager.getTrailHashAsConfigString());
 	}	
 	
 
@@ -75,17 +72,16 @@ public class MyConfig {
 	
 	public static class Common {
 
-//		public final IntValue	  happyTrailSpeed;
 		public final IntValue     debugLevel;
 		public final BooleanValue particlesOn;
 		public final ConfigValue<String> defaultTrailBlocksActual;
 		public final String defaultTrailBlocks6464 = 
-		"minecraft:cut_copper_slab,22;minecraft:tall_grass,-30;"
-		+ "minecraft:exposed_cut_copper_slab,33;minecraft:fern,-22;"
-		+ "minecraft:grass,-22;minecraft:diamond_block,99;"
-		+ "minecraft:water,11;minecraft:dirt_path,11;"
-		+ "minecraft:stone_brick_slab,33;minecraft:weathered_cut_copper_slab,44;"
-		+ "minecraft:stone_bricks,33;minecraft:large_fern,-30;minecraft:sand,-22;";
+		"minecraft:tall_grass,-67;minecraft:fern,-31;minecraft:grass,-31;"
+		+ "minecraft:large_fern,-27;minecraft:sand,-21;"
+		+ "minecraft:water,13;minecraft:dirt_path,14;"
+		+ "minecraft:cut_copper_slab,15;minecraft:exposed_cut_copper_slab,18;"
+		+ "minecraft:stone_bricks,24;minecraft:weathered_cut_copper_slab,28;"
+		+ "minecraft:stone_brick_slab,27;minecraft:diamond_block,98;";
 		
 		public Common(ForgeConfigSpec.Builder builder) {
 			builder.push("Happy Trail Control Values");

@@ -33,12 +33,19 @@ public class HappyUtility {
 		}
 
 		double amp = 0.0d;
-		double modAmp = (double)((amplifier)/15.0d);
+		if (amplifier < -10) {
+			amplifier += 10;
+		} else if (amplifier > 10){
+			amplifier -= 10;
+		}
+		
+		if (amplifier == 99) amplifier = 225; // plaid speed
+		double modAmp = (double)((amplifier)/2.0d);
 		if (amplifier < 0) {
 			modAmp = (double)(amplifier*0.01d);
 		}
-		if (modAmp > 0) modAmp -= 0.32;
-		if (modAmp < 0) modAmp += 0.10;
+		if (modAmp > 0) modAmp *= 0.12f;
+		if (modAmp < 0) modAmp *= 0.25f;
 		
 		if (am != null) {
 			amp = am.getAmount();
