@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "happytrails",
+  "version": "${version}",
+
+  "name": "Happy Trails",
+  "description": "Control Movement Speed on various Minecraft Blocks",
+  "authors": [
+    "Mactso, Lupicus"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/happytrails"
+  },
+
+  "license": "MIT License",
+  "icon": "HappyTrailsForgeMod",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.mactso.happytrails.Main"
+    ]
+  },
+  "mixins": [
+    "happytrails.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.18.x"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

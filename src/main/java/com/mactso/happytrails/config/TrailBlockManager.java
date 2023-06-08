@@ -7,15 +7,13 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.lang.String;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+
 
 public class TrailBlockManager {
 	public static Hashtable<String, TrailBlockItem> trailBlockHashtable = new Hashtable<>();
-	private static String defaultTrailBlockString = "hbm:default";
-	private static String defaultTrailBlockKey = defaultTrailBlockString;
 
 	public static TrailBlockItem getTrailBlockInfo(String key) {
 		String iKey = key;
@@ -44,42 +42,46 @@ public class TrailBlockManager {
 	public static void trailBlockInit() {
 		
 		List <String> dTL6464 = new ArrayList<>();
+		String[]  trailBlockLines;
 		
 		int i = 0;
 		String trailBlockLine6464 = "";
 		// Forge Issue 6464 patch.
-		StringTokenizer st6464 = new StringTokenizer(MyConfig.defaultTrailBlocks6464, ";");
+		StringTokenizer st6464 = new StringTokenizer(MyConfig.getTrailBlockList(), ";");
 		while (st6464.hasMoreElements()) {
 			trailBlockLine6464 = st6464.nextToken().trim();
 			if (trailBlockLine6464.isEmpty()) continue;
 			dTL6464.add(trailBlockLine6464);  
 			i++;
 		}
+		
+		
 
-		MyConfig.defaultTrailBlocks = dTL6464.toArray(new String[i]);
+		trailBlockLines = dTL6464.toArray(new String[i]);
 		
 		i = 0;
 		trailBlockHashtable.clear();
-		while (i < MyConfig.defaultTrailBlocks.length) {
+		while (i < trailBlockLines.length) {
 			try {
-				StringTokenizer st = new StringTokenizer(MyConfig.defaultTrailBlocks[i], ",");
-				String modAndBlock = st.nextToken();
-				String key = modAndBlock;
+				StringTokenizer st = new StringTokenizer(trailBlockLines[i], ",");
+				String id = st.nextToken();
 				String speed = st.nextToken();
+
 				int tHappyTrailSpeed = Integer.parseInt(speed.trim());
 				if ((tHappyTrailSpeed < -99) || (tHappyTrailSpeed > 99)) {
 					tHappyTrailSpeed = 2;
 				}
 
+				trailBlockHashtable.put(id, new TrailBlockItem(tHappyTrailSpeed));
+				if (Registry.BLOCK.containsId(new Identifier(id)))  {
 
-				trailBlockHashtable.put(key, new TrailBlockItem(tHappyTrailSpeed));
-				if (!modAndBlock.equals("hbm:default") &&
-				    !ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(modAndBlock))
-				   )  {
-					System.out.println("Happy Trails: Block: " + modAndBlock + " not in Forge Registry.  Mispelled?");
+				} else {
+					System.out.println("Happy Trails: Block: " + id + " not in Registry yet.  It may be a modded block or misspelled.");
+					trailBlockHashtable.put(id, new TrailBlockItem(tHappyTrailSpeed));
 				}
+
 			} catch (Exception e) {
-				System.out.println("Happy Trails:  Bad Block Config : " + MyConfig.defaultTrailBlocks[i]);
+				System.out.println("Happy Trails:  Line "+i+" has a Bad Block Config : " + trailBlockLines[i]);
 			}
 			i++;
 		}
