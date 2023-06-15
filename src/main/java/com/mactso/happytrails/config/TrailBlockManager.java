@@ -2,16 +2,13 @@
 
 package com.mactso.happytrails.config;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
-import java.lang.String;
-import java.text.NumberFormat;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;

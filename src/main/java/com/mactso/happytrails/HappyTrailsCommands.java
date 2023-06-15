@@ -1,7 +1,5 @@
 package com.mactso.happytrails;
 
-import java.text.NumberFormat;
-
 import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.config.TrailBlockManager;
 import com.mactso.happytrails.config.TrailBlockManager.TrailBlockItem;
@@ -62,16 +60,16 @@ public class HappyTrailsCommands {
 
 	private static void doInfoReport(ServerPlayer p) {
 		BlockPos playerBlockPos = p.blockPosition();
-		Level worldName = p.level;
+		Level worldName = p.level();
 
-		String dimensionName = p.level.dimension().location().getPath();
+		String dimensionName = p.level().dimension().location().getPath();
 
 		String chatMessage = "\nDimension: " + dimensionName + "\n Current Values";
 		Utility.sendChat((Player) p, chatMessage, ChatFormatting.GREEN);
-		BlockState bs = p.level.getBlockState(playerBlockPos);
-		Block b = p.level.getBlockState(playerBlockPos).getBlock();
+		BlockState bs = p.level().getBlockState(playerBlockPos);
+		Block b = p.level().getBlockState(playerBlockPos).getBlock();
 		if (bs.isAir()) {
-			b = p.level.getBlockState(playerBlockPos.below()).getBlock();
+			b = p.level().getBlockState(playerBlockPos.below()).getBlock();
 		}
 		ResourceLocation key = b.builtInRegistryHolder().key().location();
 		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(key.toString());
@@ -108,10 +106,10 @@ public class HappyTrailsCommands {
 
 	public static int setSpeedForBlock(ServerPlayer p, int newSpeedValue) {
 		BlockPos playerBlockPos = p.blockPosition();
-		BlockState bs = p.level.getBlockState(playerBlockPos);
-		Block block = p.level.getBlockState(playerBlockPos).getBlock();
+		BlockState bs = p.level().getBlockState(playerBlockPos);
+		Block block = p.level().getBlockState(playerBlockPos).getBlock();
 		if (bs.isAir()) {
-			block = p.level.getBlockState(playerBlockPos.below()).getBlock();
+			block = p.level().getBlockState(playerBlockPos.below()).getBlock();
 		}
 		String key = block.builtInRegistryHolder().key().location().toString();
 

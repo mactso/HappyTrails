@@ -14,7 +14,7 @@ public class SteedMoveEvent {
 	public void SteedMove(LivingTickEvent event) {
 
 		LivingEntity le = event.getEntity();
-		Level level = le.level;
+		Level level = le.level();
 
 		if (level.isClientSide()) {
 			return;

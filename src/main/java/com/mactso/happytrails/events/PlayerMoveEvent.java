@@ -20,7 +20,7 @@ public class PlayerMoveEvent {
     	}
    	
 		ServerPlayer aPlayer = (ServerPlayer) event.player;
-		Level level = aPlayer.level;
+		Level level = aPlayer.level();
 
 		int amplifier = HappyUtility.getSpeedAmplifier(aPlayer, level);
 		if (HappyUtility.applyMovementSpeedAttribute(aPlayer, amplifier)) {
