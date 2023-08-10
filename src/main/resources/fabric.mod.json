@@ -9,11 +9,13 @@
     "Mactso, Lupicus"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/happytrails"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/experience-bug-fix",
+    "sources": "https://github.com/mactso/HappyTrails",
+    "issues": "https://github.com/mactso/HappyTrails/issues"
   },
 
   "license": "MIT License",
-  "icon": "HappyTrailsForgeMod",
+  "icon": "Logo.png",
 
   "environment": "*",
   "entrypoints": {
@@ -26,9 +28,10 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": ">=0.14.21",
     "fabric": "*",
-    "minecraft": "1.18.x"
+    "minecraft": "1.20.x",
+    "java": ">=17"
   },
   "suggests": {
     "another-mod": "*"

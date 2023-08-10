@@ -1,6 +1,8 @@
 package com.mactso.happytrails;
 
 
+
+
 import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.config.TrailBlockManager;
 import com.mactso.happytrails.config.TrailBlockManager.TrailBlockItem;
@@ -8,149 +10,106 @@ import com.mactso.happytrails.utility.Utility;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+
 
 
 public class HappyTrailsCommands {
 	String subcommand = "";
 	String value = "";
 	
-	
-//	public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated)
-//	{
-//		System.out.println("Register Happy Trails Commands");
-//		dispatcher.register(CommandManager.literal("happytrails").requires((source) -> 
-//			{
-//				return source.hasPermissionLevel(2);
-//			}
-//		)
-//		.then(CommandManager.literal("debugLevel").then(
-//				CommandManager.argument("debugLevel", IntegerArgumentType.integer(0,2)).executes(ctx -> {
-//					return setDebugLevel(IntegerArgumentType.getInteger(ctx, "debugLevel"));
-//			}
-//			)
-//			)
-//			)
-//		.then(CommandManager.literal("info").executes(ctx -> {
-//			ServerPlayerEntity p = ctx.getSource().getPlayer(); // or exception!
-//					World world = p.world;
-//					String objectInfo = "";
-//
-//					if (p.world.isClient()) {
-//						MinecraftClient mc = MinecraftClient.getInstance();
-//	                    HitResult object = mc.crosshairTarget;
-//	                    if (object instanceof EntityHitResult) {
-//	                    	EntityHitResult ertr = (EntityHitResult) object;
-//	                    	Entity tempEntity = ertr.getEntity();
-//	                    	objectInfo = Utility.getResourceLocationString(tempEntity);
-//	                     } else {
-//	                   		objectInfo = "You are not looking at an entity.";	                    	 
-//	                     }
-//					} else {
-//						objectInfo = "Load single player game to see entity you are looking at.";
-//					}
-//
-//
-//					Utility.sendBoldChat(p, Utility.getResourceLocationString(world).toUpperCase()
-//		            		+ "\n Current Values", TextColor.fromFormatting(Formatting.DARK_GREEN));
-//
-//		            String msg = 
-//		              		  "\n  Happy Trails (Fabric) "  
-//		            		+ "\n  Debug Level...........: " + MyConfig.getDebugLevel()
-//		            		+ "\n  Looking At................: "  + objectInfo;
-//		            Utility.sendChat(p, msg, TextColor.fromFormatting(Formatting.DARK_GREEN));
-//					return 1;
-//			}
-//			)
-//			)		
-//		);
-//		System.out.println("Exit Register");
-//	}
-
-
-	public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated)
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
-		System.out.println("Register Happy Trails Commands");
-		dispatcher.register(CommandManager.literal("happytrails").requires((source) -> 
+		System.out.println("Register "+Main.MOD_ID +" Commands");
+		dispatcher.register(Commands.literal(Main.MOD_ID).requires((source) -> 
 			{
-				return source.hasPermissionLevel(2);
+				return source.hasPermission(2);
 			}
 		)
-		.then(CommandManager.literal("debugLevel").then(
-				CommandManager.argument("debugLevel", IntegerArgumentType.integer(0,2)).executes(ctx -> {
+		.then(Commands.literal("debugLevel").then(
+				Commands.argument("debugLevel", IntegerArgumentType.integer(0,2)).executes(ctx -> {
 					return setDebugLevel(IntegerArgumentType.getInteger(ctx, "debugLevel"));
 			}
 			)
 			)
 			)
-		.then(CommandManager.literal("particlesOn").then(
-				CommandManager.literal("true").executes(ctx -> {
+		.then(Commands.literal("particlesOn").then(
+				Commands.literal("true").executes(ctx -> {
 					return setParticlesOn(true);
 				}
 				)).then (
-						CommandManager.literal("false").executes(ctx -> {
+						Commands.literal("false").executes(ctx -> {
 					return setParticlesOn(false);
 			}
 			)
 			)
 			)
 		// update or add a speed value for the block the player is standing on.
-		.then(CommandManager.literal("setHappyTrailSpeed").then(
-				CommandManager.argument("setHappyTrailSpeed", IntegerArgumentType.integer(-99,99)).executes(ctx -> {
+		.then(Commands.literal("setHappyTrailSpeed").then(
+				Commands.argument("setHappyTrailSpeed", IntegerArgumentType.integer(-99,99)).executes(ctx -> {
 					return setSpeedForBlock((ctx.getSource()).getPlayer(), IntegerArgumentType.getInteger(ctx, "setHappyTrailSpeed"));
 			}
 			)
 			)
 			)		
-		.then(CommandManager.literal("report").executes(ctx -> {
-			ServerPlayerEntity p = ctx.getSource().getPlayer();
+		.then(Commands.literal("report").executes(ctx -> {
+			ServerPlayer p = ctx.getSource().getPlayer();
 			String report = "Configured Blocks : " + TrailBlockManager.getTrailHashAsString();
-	        Utility.sendChat (p,report,TextColor.fromFormatting(Formatting.GREEN));
+	        Utility.sendChat(p, report, ChatFormatting.GREEN);
 			return 1;
 		}
 		)
 		)
-		.then(CommandManager.literal("info").executes(ctx -> {
-					ServerPlayerEntity p = ctx.getSource().getPlayer();
-					BlockPos playerBlockPos = p.getBlockPos();
-					World worldName = p.world;
-					
-					
-			        String dimensionName = p.world.getRegistryKey().getValue().toString();
-			        String chatMessage = "Dimension: " + dimensionName + "\n Current Values";
-			        Utility.sendBoldChat (p,chatMessage, TextColor.fromFormatting(Formatting.DARK_GREEN));
-			        BlockState bs = p.world.getBlockState(playerBlockPos);
-		            Block b = p.world.getBlockState(playerBlockPos).getBlock();
-		            if (bs.isAir()) {
-			            b = p.world.getBlockState(playerBlockPos.down()).getBlock();		            	
-		            }
-		            TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(b.getRegistryEntry().getKey().get().getValue().toString());
-		            int speed = 0;
-		            if (t != null) {
-			            speed = t.getTrailBlockSpeed();
-		            }
-		            chatMessage = 
-		              		  "\n  Speed Level...........: " + speed
-		            		+ "\n  Standing On...........: " + b.getRegistryEntry().getKey().get().getValue().toString()
-		              		+ "\n  Player Position.......: " + playerBlockPos.toString()		            		
-		              		+ "\n  Debug Level...........: " + MyConfig.getDebugLevel()
-		            		;
-			        Utility.sendChat (p,chatMessage,TextColor.fromFormatting(Formatting.GREEN));
-					return 1;
-					// return 1;
+		.then(Commands.literal("info").executes(ctx -> {
+			ServerPlayer p = ctx.getSource().getPlayerOrException();
+			doInfoReport(p);
+			return 1;
 			}
 			)
 			)		
 		);
 
+	}
+	
+	private static void doInfoReport(ServerPlayer p) {
+		BlockPos playerBlockPos = p.blockPosition();
+		Level worldName = p.level();
+
+		String dimensionName = p.level().dimension().location().getPath();
+
+		String chatMessage = "\nDimension: " + dimensionName + "\n Current Values";
+        Utility.sendChat(p, chatMessage, ChatFormatting.GREEN);
+		BlockState bs = p.level().getBlockState(playerBlockPos);
+		Block b = p.level().getBlockState(playerBlockPos).getBlock();
+		if (bs.isAir()) {
+			b = p.level().getBlockState(playerBlockPos.below()).getBlock();
+		}
+		ResourceLocation key = b.builtInRegistryHolder().key().location();
+		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(key.toString());
+		int speed = 0;
+		if (t != null) {
+			speed = t.getTrailBlockSpeed();
+		}
+
+		float temp = 0;
+
+		String speedString = TrailBlockManager.getSpeedString(speed);
+
+		chatMessage = "  Speed Level..............: " + speed 
+				+ "\n  Speed ...........................: " + speedString
+				+ "\n  Standing On...............: " + key.toString()
+				+ "\n  Player Position......: " + playerBlockPos.toString() 
+				+ "\n  Debug Level.............: "
+				+ MyConfig.getDebugLevel();
+        Utility.sendChat(p, chatMessage, ChatFormatting.AQUA);
 	}
 	
 	public static int setDebugLevel (int i) {
@@ -163,14 +122,14 @@ public class HappyTrailsCommands {
 		return 1;
 	}	
 	
-	public static int setSpeedForBlock (ServerPlayerEntity p, int newSpeedValue) {
-		BlockPos playerBlockPos = p.getBlockPos();
-        BlockState bs = p.world.getBlockState(playerBlockPos);
-        Block block = p.world.getBlockState(playerBlockPos).getBlock();
+	public static int setSpeedForBlock (ServerPlayer p, int newSpeedValue) {
+		BlockPos playerBlockPos = p.blockPosition();
+        BlockState bs = p.level().getBlockState(playerBlockPos);
+        Block block = p.level().getBlockState(playerBlockPos).getBlock();
         if (bs.isAir()) {
-            block = p.world.getBlockState(playerBlockPos.down()).getBlock();		            	
+            block = p.level().getBlockState(playerBlockPos.below()).getBlock();		            	
         }
-        String key = block.getRegistryEntry().getKey().toString();
+		String key = block.builtInRegistryHolder().key().location().toString();
         if (newSpeedValue  == 0 ) {
         	TrailBlockManager.trailBlockHashtable.remove(key);
         } else {
@@ -181,7 +140,7 @@ public class HappyTrailsCommands {
         		  "Updating configuration file while running not supported yet."
         		+ "\n Change not saved ot configuration file." 	
       		;
-      Utility.sendChat (p,chatMessage,TextColor.fromFormatting(Formatting.GREEN));
+        Utility.sendChat(p, chatMessage, ChatFormatting.GREEN);
 //		MyConfig.pushValues();
 		return 1;
 	}

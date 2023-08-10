@@ -7,7 +7,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mactso.happytrails.events.MoveEntityEvent;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
+
+
 
 //import com.mactso.regrowth.events.MoveEntityEvent;
 

@@ -1,29 +1,30 @@
 package com.mactso.happytrails.events;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.World;
+
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 public class MoveEntityEvent {
 
 	public static void handleEntityMoveEvents(LivingEntity le) {
 
-		if (le instanceof PlayerEntity) {
-			handlePlayerMove((PlayerEntity) le);
+		if (le instanceof Player) {
+			handlePlayerMove((Player) le);
 			return;
 		}
 		handleSteedMove (le);
 		
 }
-		private static void handlePlayerMove ( PlayerEntity p) {
-	    	if (!(p instanceof ServerPlayerEntity)) {
+		private static void handlePlayerMove ( Player p) {
+	    	if (!(p instanceof ServerPlayer)) {
 	    		return;
 	    	}
 	   	
-			ServerPlayerEntity sp = (ServerPlayerEntity) p;
-			World level = sp.world;
+			ServerPlayer sp = (ServerPlayer) p;
+			Level level = sp.level();
 
 			int amplifier = MovementUtility.getSpeedAmplifier(sp, level);
 			
@@ -35,25 +36,25 @@ public class MoveEntityEvent {
 			// permanent
 			if (amplifier >= 1) {
 				amplifier = amplifier - 1; // convert to 0 based.
-				MovementUtility.updateEffect((LivingEntity) sp, amplifier, StatusEffects.SPEED);
+				MovementUtility.updateEffect((LivingEntity) sp, amplifier, MobEffects.MOVEMENT_SPEED);
 			} else if (amplifier <= -1) {
 				amplifier = (-amplifier) - 1; // convert to 0 based positive value.
-				MovementUtility.updateEffect((LivingEntity) sp, amplifier, StatusEffects.SLOWNESS);
+				MovementUtility.updateEffect((LivingEntity) sp, amplifier, MobEffects.MOVEMENT_SLOWDOWN);
 			}	
 		}
 
 		private static void handleSteedMove ( LivingEntity le) {
 
 
-			World level = le.world;
+			Level level = le.level();
 
-			if (level.isClient()) {
+			if (level.isClientSide()) {
 				return;
 			}
 			if (le.getFirstPassenger() == null) {
 				return;
 			}
-			if (le.getFirstPassenger() instanceof ServerPlayerEntity spe) {
+			if (le.getFirstPassenger() instanceof ServerPlayer spe) {
 				int amplifier = MovementUtility.getSpeedAmplifier(le, level);
 
 				if (MovementUtility.applyMovementSpeedAttribute(le, amplifier)) {
@@ -65,10 +66,10 @@ public class MoveEntityEvent {
 						amplifier = 12; // steed plaid speed
 					}
 					amplifier = amplifier - 1; // convert to 0 based.
-					MovementUtility.updateEffect(le, amplifier, StatusEffects.SPEED);
+					MovementUtility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SPEED);
 				} else if (amplifier <= -1) {
 					amplifier = (-amplifier) - 1; // convert to 0 based positive value.
-					MovementUtility.updateEffect(le, amplifier, StatusEffects.SLOWNESS);
+					MovementUtility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SLOWDOWN);
 				}
 			}
 		}

@@ -1,113 +1,76 @@
 package com.mactso.happytrails.utility;
 
 
-import java.lang.reflect.Field;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.mactso.happytrails.config.MyConfig;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.Category;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class Utility {
-	private static Field fieldBiomeCategory = null;
 	private static final Logger LOGGER = LogManager.getLogger();
-	static {
-		try {
-			String name = "field_9329";  // see mappings.jar
-			fieldBiomeCategory = Biome.class.getDeclaredField(name);
-			fieldBiomeCategory.setAccessible(true);
-		} catch (Exception e) {
-			LOGGER.error("Unexpected Reflection Failure set Biome.category accessible");
+	
+
+	public static void dbgChatln(Player p, String msg, int level) {
+		if (MyConfig.getDebugLevel() > level - 1) {
+			sendChat(p, msg, ChatFormatting.YELLOW);
 		}
-		if (fieldBiomeCategory == null) {
-			try {
-				String name = "category";  // see mappings.jar
-				fieldBiomeCategory = Biome.class.getDeclaredField(name);
-				fieldBiomeCategory.setAccessible(true);
-			} catch (Exception e) {
-				LOGGER.error("Development Biome field 'category' not found.");
-			}
-			
-		}
-	}
-
-	public static Category getBiomeCategory(Biome b) {
-		Category bc = Category.PLAINS;
-		try {
-			bc = (Category) fieldBiomeCategory.get(b);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return bc;
-	}
-
-	// support for any color chattext
-	public static void sendChat(PlayerEntity p, String chatMessage, TextColor green) {
-		Text component = new LiteralText(chatMessage);
-		component.getStyle().withColor(green);
-		p.sendSystemMessage(component, p.getUuid());
-	}
-
-	// support for any color, optionally bold text.
-	public static void sendBoldChat(PlayerEntity p, String chatMessage, TextColor color) {
-		Text component = new LiteralText(chatMessage);
-
-		component.getStyle().withBold(true);
-		component.getStyle().withColor(color);
-
-		p.sendSystemMessage(component, p.getUuid());
-	}
-
-	public static void warn (String dMsg) {
-		LOGGER.warn(dMsg);
 	}
 	
-	public static void debugMsg (int level, BlockPos pos, String dMsg) {
-		debugMsg(level, " ("+pos.getX()+","+pos.getY()+","+pos.getZ()+"): " + dMsg);
-	}
 	
 	public static void debugMsg(int level, String dMsg) {
+
 		if (MyConfig.getDebugLevel() > level - 1) {
-			LOGGER.warn("L" + level + ":" + dMsg);
+			LOGGER.info("L" + level + ":" + dMsg);
 		}
+
+	}
+
+	public static void debugMsg(int level, BlockPos pos, String dMsg) {
+
+		if (MyConfig.getDebugLevel() > level - 1) {
+			LOGGER.info("L" + level + " (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + "): " + dMsg);
+		}
+
 	}
 	
-	public static String getResourceLocationString(BlockState blockState) {
-		return getResourceLocationString(blockState.getBlock());
+	
+
+	public static void debugMsg(int level, LivingEntity le, String dMsg) {
+
+		if (MyConfig.getDebugLevel() > level - 1) {
+			LOGGER.info("L" + level + " (" 
+					+ le.blockPosition().getX() + "," 
+					+ le.blockPosition().getY() + ","
+					+ le.blockPosition().getZ() + "): " + dMsg);
+		}
+
+	}
+
+	public static void sendBoldChat(Player p, String chatMessage, ChatFormatting textColor) {
+
+		MutableComponent component = Component.literal(chatMessage);
+		component.setStyle(component.getStyle().withBold(true));
+		component.setStyle(component.getStyle().withColor(textColor));
+		p.sendSystemMessage(component);
+
+
+	}
+
+	public static void sendChat(Player p, String chatMessage) {
+		sendChat (p, chatMessage, ChatFormatting.DARK_GREEN);
 	}
 	
-	@SuppressWarnings("deprecation")
-	public static String getResourceLocationString(Block block) {
-		return block.getRegistryEntry().registryKey().getValue().toString();
-	}
+	public static void sendChat(Player p, String chatMessage, ChatFormatting textColor) {
 
-	@SuppressWarnings("deprecation")
-	public static String getResourceLocationString(Item item) {
-		return item.getRegistryEntry().registryKey().getValue().toString();
+		MutableComponent component = Component.literal(chatMessage);
+		component.setStyle(component.getStyle().withColor(textColor));
+		p.sendSystemMessage(component);
 	}
-
-	@SuppressWarnings("deprecation")
-	public static String getResourceLocationString(Entity entity) {
-		return entity.getType().getRegistryEntry().registryKey().getValue().toString();
-	}
-
-	public static String getResourceLocationString(World world) {
-		return world.getRegistryKey().getValue().toString();
-	}
-
 }
