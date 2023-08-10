@@ -3,6 +3,7 @@ package com.mactso.happytrails;
 
 
 
+import com.mactso.happytrails.commands.ModCommands;
 import com.mactso.happytrails.config.MyConfig;
 
 import net.fabricmc.api.ModInitializer;
@@ -23,7 +24,7 @@ public class Main implements ModInitializer {
 	
 	private void registerEvents() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-			HappyTrailsCommands.register(dispatcher);
+			ModCommands.register(dispatcher);
 		});
 	}
 

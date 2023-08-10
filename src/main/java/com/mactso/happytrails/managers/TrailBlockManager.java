@@ -1,6 +1,6 @@
 //1.15.2-2.0
 
-package com.mactso.happytrails.config;
+package com.mactso.happytrails.managers;
 
 
 import java.text.NumberFormat;
@@ -9,6 +9,9 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map.Entry;
+
+import com.mactso.happytrails.config.MyConfig;
+
 import java.util.StringTokenizer;
 
 import net.minecraft.core.registries.BuiltInRegistries;

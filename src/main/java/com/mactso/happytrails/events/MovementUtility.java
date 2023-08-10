@@ -3,7 +3,7 @@ package com.mactso.happytrails.events;
 import java.util.UUID;
 
 import com.mactso.happytrails.config.MyConfig;
-import com.mactso.happytrails.config.TrailBlockManager;
+import com.mactso.happytrails.managers.TrailBlockManager;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;

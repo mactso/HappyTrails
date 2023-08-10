@@ -26,9 +26,13 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.mactso.happytrails.Main;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -36,7 +40,7 @@ import java.util.Scanner;
 
 public class SimpleConfig {
 
-    private static final Logger LOGGER = LogManager.getLogger("SimpleConfig");
+    private static final Logger LOGGER = LogManager.getLogger(Main.MOD_ID);
     private final HashMap<String, String> config = new HashMap<>();
     private final ConfigRequest request;
     private boolean broken = false;
@@ -115,6 +119,24 @@ public class SimpleConfig {
 
     }
 
+    public void diskSaveConfig()  {
+
+        // write default config data
+    	
+    	PrintWriter writer;
+		try {
+			writer = new PrintWriter(request.file, "UTF-8");
+	        writer.write( request.getConfig() );
+	        writer.close();
+	        LOGGER.info( Main.MOD_ID + " updated configuration..." );
+		} catch (Exception e) {
+	        LOGGER.info( Main.MOD_ID + " configuration update failed." );
+			e.printStackTrace();
+		}
+
+
+    }
+    
     private void loadConfig() throws IOException {
         Scanner reader = new Scanner( request.file );
         for( int line = 1; reader.hasNextLine(); line ++ ) {
@@ -142,7 +164,7 @@ public class SimpleConfig {
         String identifier = "Config '" + request.filename + "'";
 
         if( !request.file.exists() ) {
-            LOGGER.info( identifier + " is missing, generating default one..." );
+            LOGGER.info( identifier + " is missing, generating default config..." );
 
             try {
                 createConfig();
