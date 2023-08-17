@@ -58,16 +58,16 @@ public class ModCommands {
 
 	private static void doInfoReport(ServerPlayer p) {
 		BlockPos playerBlockPos = p.blockPosition();
-		Level worldName = p.level();
+		Level worldName = p.level;
 
-		String dimensionName = p.level().dimension().location().getPath();
+		String dimensionName = p.level.dimension().location().getPath();
 
 		String chatMessage = "\nDimension: " + dimensionName + "\n Current Values";
 		Utility.sendChat(p, chatMessage, ChatFormatting.GREEN);
-		BlockState bs = p.level().getBlockState(playerBlockPos);
-		Block b = p.level().getBlockState(playerBlockPos).getBlock();
+		BlockState bs = p.level.getBlockState(playerBlockPos);
+		Block b = p.level.getBlockState(playerBlockPos).getBlock();
 		if (bs.isAir()) {
-			b = p.level().getBlockState(playerBlockPos.below()).getBlock();
+			b = p.level.getBlockState(playerBlockPos.below()).getBlock();
 		}
 		ResourceLocation key = b.builtInRegistryHolder().key().location();
 		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(key.toString());
@@ -81,8 +81,10 @@ public class ModCommands {
 		String speedString = TrailBlockManager.getSpeedString(speed);
 
 		chatMessage = "  Speed Level..............: " + speed + "\n  Speed ...........................: " + speedString
-				+ "\n  Standing On...............: " + key.toString() + "\n  Player Position......: "
-				+ playerBlockPos.toString() + "\n  Particles On.............: " + MyConfig.isParticlesOn() + "\n  Debug Level.............: " + MyConfig.getDebugLevel();
+				+ "\n  Standing On...............: " + key.toString() + "\n  Player Position......: BlockPos ("  
+				+ 
+				+ playerBlockPos.getX() + " " + playerBlockPos.getY() + " " + playerBlockPos.getZ() + " "
+				+ "\n  Particles On.............: " + MyConfig.isParticlesOn() + "\n  Debug Level.............: " + MyConfig.getDebugLevel();
 		Utility.sendChat(p, chatMessage, ChatFormatting.AQUA);
 	}
 
@@ -101,10 +103,10 @@ public class ModCommands {
 
 	public static int setSpeedForBlock(ServerPlayer p, int newSpeedValue) {
 		BlockPos playerBlockPos = p.blockPosition();
-		BlockState bs = p.level().getBlockState(playerBlockPos);
-		Block block = p.level().getBlockState(playerBlockPos).getBlock();
+		BlockState bs = p.level.getBlockState(playerBlockPos);
+		Block block = p.level.getBlockState(playerBlockPos).getBlock();
 		if (bs.isAir()) {
-			block = p.level().getBlockState(playerBlockPos.below()).getBlock();
+			block = p.level.getBlockState(playerBlockPos.below()).getBlock();
 		}
 		String key = block.builtInRegistryHolder().key().location().toString();
 		if (newSpeedValue == 0) {

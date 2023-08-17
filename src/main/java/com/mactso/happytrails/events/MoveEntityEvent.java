@@ -24,7 +24,7 @@ public class MoveEntityEvent {
 	    	}
 	   	
 			ServerPlayer sp = (ServerPlayer) p;
-			Level level = sp.level();
+			Level level = sp.level;
 
 			int amplifier = MovementUtility.getSpeedAmplifier(sp, level);
 			
@@ -46,7 +46,7 @@ public class MoveEntityEvent {
 		private static void handleSteedMove ( LivingEntity le) {
 
 
-			Level level = le.level();
+			Level level = le.level;
 
 			if (level.isClientSide()) {
 				return;

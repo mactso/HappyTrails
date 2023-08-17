@@ -99,7 +99,7 @@ public class MovementUtility {
 		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(key.toString());
 		
 		if (t == null) { // standing on/in block with no configuration entry
-			b = le.level().getBlockState(le.blockPosition().below()).getBlock();
+			b = le.level.getBlockState(le.blockPosition().below()).getBlock();
 	        key = b.builtInRegistryHolder().key().location();
 			t = TrailBlockManager.getTrailBlockInfo(key.toString());
 			if (t == null) { // lower block also has no configuration entry
