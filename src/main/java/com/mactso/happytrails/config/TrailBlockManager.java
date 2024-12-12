@@ -153,7 +153,7 @@ public class TrailBlockManager {
 
 				trailBlockHashtable.put(key, new TrailBlockItem(tHappyTrailSpeed));
 				if (!modAndBlock.equals("hbm:default")
-						&& !ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(modAndBlock))) {
+						&& !ForgeRegistries.BLOCKS.containsKey(ResourceLocation.parse(modAndBlock))) {
 					System.out.println("Happy Trails: Block: " + modAndBlock + " not in Forge Registry.  Mispelled?");
 				}
 			} catch (Exception e) {
