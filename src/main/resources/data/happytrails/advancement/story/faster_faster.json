@@ -2,29 +2,28 @@
   "parent": "minecraft:story/root",
 	"display": {
 		"title": {
-			"text": "Down The Path",
+			"translate": "advancements.fasterfaster.title",
 			"color": "green"
 		},
 		"description": {
-			"text": "Right-click on grass with your shovel to make paths you can move faster on!",
+			"translate": "advancements.fasterfaster.description",
 			"color": "green"
 		},
 		"icon": {
-			"item": "minecraft:stone_shovel",
-      		"nbt": "{Damage:0}"
+			"count":1,
+			"id": "minecraft:stone_bricks"
 		}
 	},
 	"rewards": {
-		"experience": 3
+		"experience": 5
 	},
 	"criteria": {
-		"inv_changed-minecraft:stone_shovel": {
+		"inv_changed-minecraft:stone_brick": {
 			"trigger": "minecraft:inventory_changed",
 			"conditions": {
 				"items": [
 					{
-						"item": "minecraft:stone_shovel",
-						"nbt": "{Damage:0}"
+						"items": "minecraft:stone_bricks"
 					}
 				]
 			}
@@ -32,7 +31,7 @@
 	},
 	"requirements": [
 		[
-			"inv_changed-minecraft:stone_shovel"
+			"inv_changed-minecraft:stone_brick"
 		]
 	]
 }

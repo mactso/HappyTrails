@@ -1,10 +1,9 @@
 package com.mactso.happytrails.events;
 
-import java.util.UUID;
-
 import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.managers.TrailBlockManager;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,16 +18,17 @@ import net.minecraft.world.level.block.Block;
 public class MovementUtility {
 	final static int TWO_SECONDS = 40;
 	
-	static UUID UUID_HAPPYMODSPEED = UUID.fromString("793fcced-972d-45cb-b385-84694056001a");
-	public static final AttributeModifier HAPPYMODSPEED_ATTR = new AttributeModifier(UUID.fromString("8d2c8d25-7a8c-4fbc-be91-8dba276ebbe0"), "happytrailsspeed", 1.0, Operation.MULTIPLY_BASE);
+	// from Piglin code to modify baby speed (1.21.1 on)
+	private static final ResourceLocation HAPPYMODSPEED_ID = ResourceLocation.fromNamespaceAndPath("happytrails", "speedmod");
+	public static final AttributeModifier HAPPYMODSPEED_ATTR = new AttributeModifier(HAPPYMODSPEED_ID, 1.0, Operation.ADD_MULTIPLIED_BASE);
 	
 	public static boolean applyMovementSpeedAttribute(LivingEntity le, int amplifier) {
 
 
-		AttributeModifier am = le.getAttribute(Attributes.MOVEMENT_SPEED).getModifier(UUID_HAPPYMODSPEED);
+		AttributeModifier am = le.getAttribute(Attributes.MOVEMENT_SPEED).getModifier(HAPPYMODSPEED_ID);
 		if (Math.abs(amplifier)<=10) {
 			if (am != null) {
-				le.getAttribute(Attributes.MOVEMENT_SPEED).removePermanentModifier(UUID_HAPPYMODSPEED); 
+				le.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(HAPPYMODSPEED_ATTR); 
 			}
 			return false;
 		}
@@ -49,7 +49,7 @@ public class MovementUtility {
 		if (modAmp < 0) modAmp *= 0.25f;
 		
 		if (am != null) {
-			amp = am.getAmount();
+			amp = am.amount();
 		}
 
 		if (modAmp == amp) {
@@ -57,11 +57,11 @@ public class MovementUtility {
 		}
 
 		if (modAmp == 0.0) {
-			le.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(UUID_HAPPYMODSPEED);
+			le.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(HAPPYMODSPEED_ID);
 			return true;
 		}
-		le.getAttribute(Attributes.MOVEMENT_SPEED).removePermanentModifier(UUID_HAPPYMODSPEED); 
-		AttributeModifier hms = new AttributeModifier(UUID_HAPPYMODSPEED, "happytrailsspeed", modAmp, Operation.MULTIPLY_BASE);
+		le.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(HAPPYMODSPEED_ID); 
+		AttributeModifier hms = new AttributeModifier(HAPPYMODSPEED_ID, modAmp, Operation.ADD_MULTIPLIED_BASE);
 		le.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(hms);  
 		return true;
 
@@ -71,7 +71,7 @@ public class MovementUtility {
 		
 	}
 
-	public static void updateEffect(LivingEntity e, int amplifier,  MobEffect mobEffect) {
+	public static void updateEffect(LivingEntity e, int amplifier,  Holder<MobEffect> mobEffect) {
 		MobEffectInstance ei = e.getEffect(mobEffect);
 		if (amplifier == 10) {
 			amplifier = 20;  // player "plaid" speed.

@@ -22,21 +22,20 @@ package com.mactso.happytrails.config;
  * THE SOFTWARE.
  */
 
-import net.fabricmc.loader.api.FabricLoader;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Scanner;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.mactso.happytrails.Main;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Scanner;
+import net.fabricmc.loader.api.FabricLoader;
 
 public class SimpleConfig {
 

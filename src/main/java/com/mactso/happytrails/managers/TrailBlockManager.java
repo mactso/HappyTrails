@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.mactso.happytrails.config.MyConfig;
+import com.mactso.happytrails.utility.Utility;
 
 import java.util.StringTokenizer;
 
@@ -149,7 +150,8 @@ public class TrailBlockManager {
 		while (i < trailBlockLines.length) {
 			try {
 				StringTokenizer st = new StringTokenizer(trailBlockLines[i], ",");
-				String id = st.nextToken();
+				String modAndBlock = st.nextToken();
+				String key = modAndBlock;
 				String speed = st.nextToken();
 
 				int tHappyTrailSpeed = Integer.parseInt(speed.trim());
@@ -157,16 +159,16 @@ public class TrailBlockManager {
 					tHappyTrailSpeed = 2;
 				}
 
-				trailBlockHashtable.put(id, new TrailBlockItem(tHappyTrailSpeed));
-				if (BuiltInRegistries.BLOCK.containsKey(new ResourceLocation(id)))  {
+				trailBlockHashtable.put(key, new TrailBlockItem(tHappyTrailSpeed));
+				if (BuiltInRegistries.BLOCK.containsKey(ResourceLocation.parse(modAndBlock)))  {
 
 				} else {
-					System.out.println("Happy Trails: Block: " + id + " not in Registry yet.  It may be a modded block or misspelled.");
-					trailBlockHashtable.put(id, new TrailBlockItem(tHappyTrailSpeed));
+					Utility.debugMsg(0, "(WARN) Happy Trails: Block " + modAndBlock + " is not in the Registry.  Mispelled?");					trailBlockHashtable.put(key, new TrailBlockItem(tHappyTrailSpeed));
 				}
 
 			} catch (Exception e) {
-				System.out.println("Happy Trails:  Line "+i+" has a Bad Block Config : " + trailBlockLines[i]);
+				Utility.debugMsg(0,"(ERROR)Happy Trails:  Bad Block Config : " + trailBlockLines[i]);
+
 			}
 			i++;
 		}

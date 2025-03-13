@@ -2,27 +2,28 @@
   "parent": "minecraft:story/root",
 	"display": {
 		"title": {
-			"text": "Faster Faster!",
+			"translate": "advancements.downthepath.title",
 			"color": "green"
 		},
 		"description": {
-			"text": "Build a road out of stone brick slabs to move even faster!",
+			"translate": "advancements.downthepath.description",
 			"color": "green"
 		},
 		"icon": {
-			"item": "minecraft:stone_bricks"
+			"count":1,
+			"id": "minecraft:stone_shovel"
 		}
 	},
 	"rewards": {
-		"experience": 5
+		"experience": 3
 	},
 	"criteria": {
-		"inv_changed-minecraft:stone_brick": {
+		"inv_changed-minecraft:stone_shovel": {
 			"trigger": "minecraft:inventory_changed",
 			"conditions": {
 				"items": [
 					{
-						"item": "minecraft:stone_bricks"
+						"items": "#minecraft:shovels"
 					}
 				]
 			}
@@ -30,7 +31,7 @@
 	},
 	"requirements": [
 		[
-			"inv_changed-minecraft:stone_brick"
+			"inv_changed-minecraft:stone_shovel"
 		]
 	]
 }
