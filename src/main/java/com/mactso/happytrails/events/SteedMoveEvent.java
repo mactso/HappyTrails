@@ -34,10 +34,10 @@ public class SteedMoveEvent {
 					amplifier = 12; // steed plaid speed
 				}
 				amplifier = amplifier - 1; // convert to 0 based.
-				HappyUtility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SPEED);
+				HappyUtility.updateEffect(le, amplifier, MobEffects.SPEED);
 			} else if (amplifier <= -1) {
 				amplifier = (-amplifier) - 1; // convert to 0 based positive value.
-				HappyUtility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SLOWDOWN);
+				HappyUtility.updateEffect(le, amplifier, MobEffects.SLOWNESS);
 			}
 		}
 	}

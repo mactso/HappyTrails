@@ -6,6 +6,7 @@ import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.config.TrailBlockManager;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -97,13 +98,11 @@ public class HappyUtility {
 	
 	public static int getSpeedAmplifier(LivingEntity le, Level level) {
 		Block b = level.getBlockState(le.blockPosition()).getBlock();
-        ResourceLocation key = b.builtInRegistryHolder().key().location();
-		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(key.toString());
+		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(BuiltInRegistries.BLOCK.getKey(b).toString());
 		
 		if (t == null) { // standing on/in block with no configuration entry
 			b = le.level().getBlockState(le.blockPosition().below()).getBlock();
-	        key = b.builtInRegistryHolder().key().location();
-			t = TrailBlockManager.getTrailBlockInfo(key.toString());
+			t = TrailBlockManager.getTrailBlockInfo(BuiltInRegistries.BLOCK.getKey(b).toString());
 			if (t == null) { // lower block also has no configuration entry
 				return 0;
 			}

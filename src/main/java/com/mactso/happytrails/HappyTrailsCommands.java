@@ -11,10 +11,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -40,55 +38,53 @@ public class HappyTrailsCommands {
 									IntegerArgumentType.getInteger(ctx, "setHappyTrailSpeed"));
 				})))
 				.then(Commands.literal("report").executes(ctx -> {
-					ServerPlayer p = ctx.getSource().getPlayerOrException();
+					ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
 					String chatMessage = "\nConfigured Blocks :" ;
-					Utility.sendChat((Player) p, chatMessage, ChatFormatting.AQUA);
+					Utility.sendChat( serverPlayer, chatMessage, ChatFormatting.AQUA);
 					chatMessage = "Spd  Meters per Sec.  Blocks" ;
-					Utility.sendChat((Player) p, chatMessage, ChatFormatting.AQUA);
+					Utility.sendChat( serverPlayer, chatMessage, ChatFormatting.AQUA);
 					chatMessage = TrailBlockManager.getTrailBlockReport();
-					Utility.sendChat((Player) p, chatMessage, ChatFormatting.GREEN);
+					Utility.sendChat( serverPlayer, chatMessage, ChatFormatting.GREEN);
 					return 1;
 				}))
 				.then(Commands.literal("info").executes(ctx -> {
-					ServerPlayer p = ctx.getSource().getPlayerOrException();
-					doInfoReport(p);
+					ServerPlayer serverPlayer = ctx.getSource().getPlayerOrException();
+					doInfoReport(serverPlayer);
 					return 1;
 					// return 1;
 				})));
 
 	}
 
-	private static void doInfoReport(ServerPlayer p) {
-		BlockPos playerBlockPos = p.blockPosition();
-		Level worldName = p.level();
+	private static void doInfoReport(ServerPlayer serverPlayer) {
 
-		String dimensionName = p.level().dimension().location().getPath();
+		BlockPos playerBlockPos = serverPlayer.blockPosition();
+		String dimensionName = serverPlayer.level().dimension().location().getPath();
 
 		String chatMessage = "\nDimension: " + dimensionName + "\n Current Values";
-		Utility.sendChat((Player) p, chatMessage, ChatFormatting.GREEN);
-		BlockState bs = p.level().getBlockState(playerBlockPos);
-		Block b = p.level().getBlockState(playerBlockPos).getBlock();
+		Utility.sendChat( serverPlayer, chatMessage, ChatFormatting.GREEN);
+
+		BlockState bs = serverPlayer.serverLevel().getBlockState(playerBlockPos);
+		Block block = bs.getBlock();
 		if (bs.isAir()) {
-			b = p.level().getBlockState(playerBlockPos.below()).getBlock();
+			block = serverPlayer.serverLevel().getBlockState(playerBlockPos.below()).getBlock();
 		}
-		ResourceLocation key = b.builtInRegistryHolder().key().location();
-		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(key.toString());
+
+		String keyString = BuiltInRegistries.BLOCK.getKey(block).toString();
+		TrailBlockManager.TrailBlockItem t = TrailBlockManager.getTrailBlockInfo(keyString);
 		int speed = 0;
 		if (t != null) {
 			speed = t.getTrailBlockSpeed();
 		}
 
-		float temp = 0;
-
-		String speedString = TrailBlockManager.getSpeedString(speed);
 
 		chatMessage = "  Speed Level..............: " + speed 
-				+ "\n  Speed ...........................: " + speedString
-				+ "\n  Standing On...............: " + key.toString()
+				+ "\n  Speed ...........................: " + TrailBlockManager.getSpeedString(speed)
+				+ "\n  Standing On...............: " + keyString
 				+ "\n  Player Position......: " + playerBlockPos.toString() 
 				+ "\n  Debug Level.............: "
 				+ MyConfig.aDebugLevel 	;
-		Utility.sendChat((Player) p, chatMessage, ChatFormatting.AQUA);
+		Utility.sendChat( serverPlayer, chatMessage, ChatFormatting.AQUA);
 	}
 
 
@@ -111,12 +107,11 @@ public class HappyTrailsCommands {
 		if (bs.isAir()) {
 			block = p.level().getBlockState(playerBlockPos.below()).getBlock();
 		}
-		String key = block.builtInRegistryHolder().key().location().toString();
-
+		String keyString = BuiltInRegistries.BLOCK.getKey(block).toString();
 		if (newSpeedValue == 0) {
-			TrailBlockManager.trailBlockHashtable.remove(key);
+			TrailBlockManager.trailBlockHashtable.remove(keyString);
 		} else {
-			TrailBlockManager.trailBlockHashtable.put(key, new TrailBlockItem(newSpeedValue));
+			TrailBlockManager.trailBlockHashtable.put(keyString, new TrailBlockItem(newSpeedValue));
 		}
 		MyConfig.pushValues();
 		doInfoReport(p);
