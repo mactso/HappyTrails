@@ -4,7 +4,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;;
 
 
@@ -13,7 +13,7 @@ public class PlayerMoveEvent {
 
 
 	@SubscribeEvent
-    public void PlayerMove(PlayerTickEvent event) { 
+    public static void PlayerMove(PlayerTickEvent event) { 
 
     	if (!(event.player instanceof ServerPlayer)) {
     		return;

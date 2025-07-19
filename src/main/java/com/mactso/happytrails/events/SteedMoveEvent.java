@@ -5,13 +5,16 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+
+@Mod.EventBusSubscriber() 
 public class SteedMoveEvent {
 
 	@SubscribeEvent
-	public void SteedMove(LivingTickEvent event) {
+	public static void SteedMove(LivingTickEvent event) {
 
 		LivingEntity le = event.getEntity();
 		Level level = le.level();

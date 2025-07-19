@@ -64,10 +64,10 @@ public class HappyTrailsCommands {
 		String chatMessage = "\nDimension: " + dimensionName + "\n Current Values";
 		Utility.sendChat( serverPlayer, chatMessage, ChatFormatting.GREEN);
 
-		BlockState bs = serverPlayer.serverLevel().getBlockState(playerBlockPos);
+		BlockState bs = serverPlayer.level().getBlockState(playerBlockPos);
 		Block block = bs.getBlock();
 		if (bs.isAir()) {
-			block = serverPlayer.serverLevel().getBlockState(playerBlockPos.below()).getBlock();
+			block = serverPlayer.level().getBlockState(playerBlockPos.below()).getBlock();
 		}
 
 		String keyString = BuiltInRegistries.BLOCK.getKey(block).toString();
@@ -100,12 +100,12 @@ public class HappyTrailsCommands {
 		return 1;
 	}
 
-	public static int setSpeedForBlock(ServerPlayer p, int newSpeedValue) {
-		BlockPos playerBlockPos = p.blockPosition();
-		BlockState bs = p.level().getBlockState(playerBlockPos);
-		Block block = p.level().getBlockState(playerBlockPos).getBlock();
+	public static int setSpeedForBlock(ServerPlayer serverPlayer, int newSpeedValue) {
+		BlockPos playerBlockPos = serverPlayer.blockPosition();
+		BlockState bs = serverPlayer.level().getBlockState(playerBlockPos);
+		Block block = serverPlayer.level().getBlockState(playerBlockPos).getBlock();
 		if (bs.isAir()) {
-			block = p.level().getBlockState(playerBlockPos.below()).getBlock();
+			block = serverPlayer.level().getBlockState(playerBlockPos.below()).getBlock();
 		}
 		String keyString = BuiltInRegistries.BLOCK.getKey(block).toString();
 		if (newSpeedValue == 0) {
@@ -114,7 +114,7 @@ public class HappyTrailsCommands {
 			TrailBlockManager.trailBlockHashtable.put(keyString, new TrailBlockItem(newSpeedValue));
 		}
 		MyConfig.pushValues();
-		doInfoReport(p);
+		doInfoReport(serverPlayer);
 		return 1;
 	}
 }
