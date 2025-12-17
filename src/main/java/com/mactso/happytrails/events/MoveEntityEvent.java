@@ -36,10 +36,10 @@ public class MoveEntityEvent {
 			// permanent
 			if (amplifier >= 1) {
 				amplifier = amplifier - 1; // convert to 0 based.
-				MovementUtility.updateEffect((LivingEntity) sp, amplifier, MobEffects.MOVEMENT_SPEED);
+				MovementUtility.updateEffect((LivingEntity) sp, amplifier, MobEffects.SPEED);
 			} else if (amplifier <= -1) {
 				amplifier = (-amplifier) - 1; // convert to 0 based positive value.
-				MovementUtility.updateEffect((LivingEntity) sp, amplifier, MobEffects.MOVEMENT_SLOWDOWN);
+				MovementUtility.updateEffect((LivingEntity) sp, amplifier, MobEffects.SLOWNESS);
 			}	
 		}
 
@@ -66,10 +66,10 @@ public class MoveEntityEvent {
 						amplifier = 12; // steed plaid speed
 					}
 					amplifier = amplifier - 1; // convert to 0 based.
-					MovementUtility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SPEED);
+					MovementUtility.updateEffect(le, amplifier, MobEffects.SPEED);
 				} else if (amplifier <= -1) {
 					amplifier = (-amplifier) - 1; // convert to 0 based positive value.
-					MovementUtility.updateEffect(le, amplifier, MobEffects.MOVEMENT_SLOWDOWN);
+					MovementUtility.updateEffect(le, amplifier, MobEffects.SLOWNESS);
 				}
 			}
 		}
