@@ -9,14 +9,16 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.StringTokenizer;
 
 import com.mactso.happytrails.config.MyConfig;
 import com.mactso.happytrails.utility.Utility;
 
-import java.util.StringTokenizer;
-
+import net.minecraft.core.Holder.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Block;
 
 
 
@@ -151,7 +153,6 @@ public class TrailBlockManager {
 			try {
 				StringTokenizer st = new StringTokenizer(trailBlockLines[i], ",");
 				String modAndBlock = st.nextToken();
-				String key = modAndBlock;
 				String speed = st.nextToken();
 
 				int tHappyTrailSpeed = Integer.parseInt(speed.trim());
@@ -159,11 +160,12 @@ public class TrailBlockManager {
 					tHappyTrailSpeed = 2;
 				}
 
-				trailBlockHashtable.put(key, new TrailBlockItem(tHappyTrailSpeed));
-				if (BuiltInRegistries.BLOCK.containsKey(ResourceLocation.parse(modAndBlock)))  {
-
+                // Validate using Fabric 1.21.11 registry
+				Optional<Reference<Block>> optBlock = BuiltInRegistries.BLOCK.get(Identifier.parse(modAndBlock));
+				if (optBlock.isPresent()) {
+	                trailBlockHashtable.put(modAndBlock, new TrailBlockItem(tHappyTrailSpeed));
 				} else {
-					Utility.debugMsg(0, "(WARN) Happy Trails: Block " + modAndBlock + " is not in the Registry.  Mispelled?");					trailBlockHashtable.put(key, new TrailBlockItem(tHappyTrailSpeed));
+                    Utility.debugMsg(0, "(WARN) Happy Trails: Block " + modAndBlock + " is not in the Registry. Mispelled?");
 				}
 
 			} catch (Exception e) {
@@ -178,7 +180,9 @@ public class TrailBlockManager {
 	public static class TrailBlockItem {
 		int trailBlockSpeed;
 
+
 		public TrailBlockItem(int trailBlockSpeed) {
+
 			this.trailBlockSpeed = trailBlockSpeed;
 		}
 
