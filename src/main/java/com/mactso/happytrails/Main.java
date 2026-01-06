@@ -1,4 +1,3 @@
-// 15.2 -Happy Trails
 package com.mactso.happytrails;
 
 import com.mactso.happytrails.config.MyConfig;

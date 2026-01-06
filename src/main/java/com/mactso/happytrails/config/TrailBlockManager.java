@@ -10,14 +10,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class TrailBlockManager {
 	public static Hashtable<String, TrailBlockItem> trailBlockHashtable = new Hashtable<>();
-	private static String defaultTrailBlockString = "hbm:default";
-	private static String defaultTrailBlockKey = defaultTrailBlockString;
-
 
 	
 	private static record ReportData(String block, int speed)  {
@@ -153,7 +150,7 @@ public class TrailBlockManager {
 
 				trailBlockHashtable.put(key, new TrailBlockItem(tHappyTrailSpeed));
 				if (!modAndBlock.equals("hbm:default")
-						&& !ForgeRegistries.BLOCKS.containsKey(ResourceLocation.parse(modAndBlock))) {
+						&& !ForgeRegistries.BLOCKS.containsKey(Identifier.parse(modAndBlock))) {
 					System.out.println("Happy Trails: Block: " + modAndBlock + " not in Forge Registry.  Mispelled?");
 				}
 			} catch (Exception e) {

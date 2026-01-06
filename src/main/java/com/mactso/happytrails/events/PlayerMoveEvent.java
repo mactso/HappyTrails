@@ -1,26 +1,27 @@
 package com.mactso.happytrails.events;
+
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;;
-
+import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber()
 public class PlayerMoveEvent {
 
 
 	@SubscribeEvent
-    public static void PlayerMove(PlayerTickEvent event) { 
+    public static void PlayerMove(PlayerTickEvent.Pre event) { 
 
-    	if (!(event.player instanceof ServerPlayer)) {
+		
+    	if (!(event.player() instanceof ServerPlayer)) {
     		return;
     	}
    	
-		ServerPlayer aPlayer = (ServerPlayer) event.player;
-		Level level = aPlayer.level();
+		ServerPlayer aPlayer = (ServerPlayer) event.player();
+		ServerLevel level = aPlayer.level();
 
 		int amplifier = HappyUtility.getSpeedAmplifier(aPlayer, level);
 		if (HappyUtility.applyMovementSpeedAttribute(aPlayer, amplifier)) {

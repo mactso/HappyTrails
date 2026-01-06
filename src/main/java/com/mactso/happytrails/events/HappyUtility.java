@@ -7,7 +7,7 @@ import com.mactso.happytrails.config.TrailBlockManager;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +23,7 @@ public class HappyUtility {
 	static UUID UUID_HAPPYMODSPEED = UUID.fromString("793fcced-972d-45cb-b385-84694056001a");
 
 	// from Piglin code to modify baby speed (1.21.1 on)
-	private static final ResourceLocation HAPPYMODSPEED_ID = ResourceLocation.fromNamespaceAndPath("happytrails", "speedmod");
+	private static final Identifier HAPPYMODSPEED_ID = Identifier.fromNamespaceAndPath("happytrails", "speedmod");
 	public static final AttributeModifier HAPPYMODSPEED_ATTR = new AttributeModifier(HAPPYMODSPEED_ID, 1.0, Operation.ADD_MULTIPLIED_BASE);
 
 	public static boolean applyMovementSpeedAttribute(LivingEntity le, int amplifier) {
